@@ -1,3 +1,90 @@
 \capitulo{1}{Introducción}
 
-Descripción del contenido del trabajo y del estrucutra de la memoria y del resto de materiales entregados.
+\epigraph{La probabilidad de que 2 iris cuenten con el mismo patrón es de aproximadamente 1 entre $10^{78}$. (La población mundial es de alrededor de $10^{10}$)}{Frankin Cheung}
+
+La biometría se define cómo la toma de medidas estandarizadas de los seres vivos o de procesos biológicos \cite{intro:bio-wiki} que pueden ser usadas cómo medio para la identificación automática de individuos. 
+Una buena biometría deberá ser:
+\begin{itemize}
+	\item \textbf{Universal:} cada individuo deberá tener unos determinados rasgos biométricos únicos.
+	\item \textbf{Recolectable:} los rasgos biométricos podrán ser medidos y guardados.
+	\item \textbf{Permanente:} no deberían variar a lo largo de la vida del individuo.
+\end{itemize}
+Los sistemas de reconocimiento basados en la biometría han experimetado un auge muy pronunciado en los últimos años, esto se puede ver reflejado en su implementación en dispositivos cotidianos del día a día, cómo \emph{smartphones} y \emph{tablets}.
+
+Pero más allá de las huellas dactilares, la geometría de la mano o el reconocimiento facial (entre otros), existe otra rasgo físico nato que está cobrando mucha importancia, ya que comparado con los mencionados anteriormente, es mucho más seguro, se trata del iris ocular.
+
+La idea de usar el iris para la identificación fue propuesto por el oftalmólogo Frank Burch en 1936, pero no fue hasta 1987 cuando Leonard Flon y Aran Safir patentaron la idea de Burch, pero fueron incapaces de desarrollar por sí mismos los algoritmos necesarios, así que decidieron acudir a John Daugman, profesor en ese entonces de la Universidad de Harvard.
+Los algoritmos desarrollados por Daugmann en 1994 son la base de todos los sistemas de reconocimiento de iris actuales\cite{intro:iris-rec}.
+
+El iris cómo rasgo biométrico aporta las siguientes ventajas\cite{intro:iris-bio}:
+\begin{itemize}
+	\item Es un rasgo que permanece invariable a lo largo de toda la vida del individuo y rara vez se ve afectado a causa de factores externos cómo accidentes o cirugías.
+	\item Está constantemente protegido por la córnea
+	\item Se trata de una técnica no invasiva, ya que no hace falta el contacto con el individuo para la toma de muestras, y por tanto su aceptabilidad por parte de estos es alta.
+	\item Sus patrones son tan únicos que no existen 2 iris iguales, incluso los iris derecho e izquierdo del mismo individuo son distintos.
+\end{itemize}
+
+En el siguiente proyecto se expondrá el funcionamiento básico de un sistema de reconocimiento mediante el análisis de los patrones únicos del tejido membrano-muscular del iris mediante técnicas de \emph{Machine Learning}.
+
+\section{Estructura de la memoria}\label{estructura-de-la-memoria}
+
+
+La memoria sigue la siguiente estructura:
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Introducción:} breve descripción del problema a resolver y la
+  solución propuesta. Estructura de la memoria y listado de materiales
+  adjuntos.
+\item
+  \textbf{Objetivos del proyecto:} exposición de los objetivos que
+  persigue el proyecto.
+\item
+  \textbf{Conceptos teóricos:} breve explicación de los conceptos
+  teóricos clave para la comprensión de la solución propuesta.
+\item
+  \textbf{Técnicas y herramientas:} listado de técnicas metodológicas y
+  herramientas utilizadas para gestión y desarrollo del proyecto.
+\item
+  \textbf{Aspectos relevantes del desarrollo:} exposición de aspectos
+  destacables que tuvieron lugar durante la realización del proyecto.
+\item
+  \textbf{Trabajos relacionados:} estado del arte en el campo de la
+  monitorización de la actividad de vuelo de colmenas y proyectos
+  relacionados.
+\item
+  \textbf{Conclusiones y líneas de trabajo futuras:} conclusiones
+  obtenidas tras la realización del proyecto y posibilidades de mejora o
+  expansión de la solución aportada.
+\end{itemize}
+
+\section{Materiales adjuntos}\label{materiales-adjuntos}
+\begin{itemize}	
+	\item \textbf{Anexos:}
+	\begin{itemize}
+	\tightlist
+	\item
+  		\textbf{Plan del proyecto software:} planificación temporal y estudio
+  		de viabilidad del proyecto.
+	\item
+  		\textbf{Especificación de requisitos del software:} se describe la
+  		fase de análisis; los objetivos generales, el catálogo de requisitos
+  		del sistema y la especificación de requisitos funcionales y no
+  		funcionales.
+	\item
+  		\textbf{Especificación de diseño:} se describe la fase de diseño; el
+  		ámbito del software, el diseño de datos, el diseño procedimental y el
+  		diseño arquitectónico.
+	\item
+  		\textbf{Manual del programador:} recoge los aspectos más relevantes
+  		relacionados con el código fuente (estructura, compilación,
+  		instalación, ejecución, pruebas, etc.).
+	\item
+  		\textbf{Manual de usuario:} guía de usuario para el correcto manejo 			de la aplicación.
+	\end{itemize}
+	
+	\item \textbf{Notebooks de experimentación:} contienen todos los experimentos realizados y el conjunto de datasets empleados para la realización los mismos.
+	\item \textbf{Aplicación de escritorio:} demo realizada en Kivy que muestra la funcionalidad del proyecto.
+\end{itemize}
+
+El proyecto, junto con los materiales mencionados están disponibles en el siguiente repositorio de GitHub: \url{https://github.com/jaa0124/iris_classifier}
