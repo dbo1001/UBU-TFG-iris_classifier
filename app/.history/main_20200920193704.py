@@ -18,14 +18,6 @@ from skimage import data
 from skimage.io import imread, imshow
 from keras.models import load_model
 
-
-from skimage import data
-from skimage.transform import (hough_line, hough_line_peaks, hough_circle, hough_circle_peaks)
-from skimage.draw import circle_perimeter
-from skimage.color import gray2rgb
-from matplotlib import cm
-from time import time
-
 ventana = Tk()
 ventana.geometry("500x500")
 ventana.title("Iris Classifier")
@@ -51,37 +43,13 @@ def upload_image():
         pass
 
 def show_menu(file_path):
-    # segmentación
-    segment_button=Button(ventana,text="Classify Iris", command=lambda: segmentar(file_path),padx=10,pady=5)
+    # segemntación
+    segment_button=Button(ventana,text="Classify Iris", command=lambda: clasificar(file_path),padx=10,pady=5)
     segment_button.configure(background='#364156',
                          foreground='white',
                          font=('arial',10,'bold'))
     segment_button.place(relx=0.79,rely=0.40)
 
-#     # coordenadas
-#     segmented_image= ImageTk.PhotoImage(Image.open("output.png"))
-#     coords_button=Button(ventana,text="Coordenadas Iris", command=lambda: get_coords(segmented_image),padx=10,pady=5)
-#     coords_button.configure(background='#364156',
-#                          foreground='white',
-#                          font=('arial',10,'bold'))
-#     coords_button.place(relx=0.50,rely=0.30)
-
-# def canny_edges(img):
-#     edges = cv2.Canny(img, 10, 255)
-#     return edges
-
-# def draw_circles(img, cx, cy, radii):
-#     '''
-#     A partir de los centros y el radio detectados dibuja el iris sobre la imagen que se le
-#     pasa como parámetro.
-#     '''
-#     image = img.copy()
-# #     cv2.circle(image,(cx,cy), radii, (255, 0, 0), 2)
-#     pupil = cv2.circle(image,(cx[0],cy[0]), radii[0]+3, (255, 0, 0), 2)
-#     iris = cv2.circle(image,(cx[1],cy[1]), radii[1], (255, 0, 0), 2)
-#     return image
-
-# def get_coords(image):
 
 def ajustar_input(file_path):
     img = cv2.imread(file_path,0)
@@ -91,13 +59,13 @@ def ajustar_input(file_path):
     return render
 
 def morph_operator(result):
-    img = cv2.resize(result[0][:,:,0], (320,280), interpolation=cv2.INTER_AREA)
+    img = cv2.resize(img[0][:,:,0], (320,280), interpolation=cv2.INTER_AREA)
     img = cv2.normalize(src=img, dst=None, alpha=0, beta=255, norm_type=cv2.NORM_MINMAX, dtype=cv2.CV_8U)
     blur= cv2.GaussianBlur(img,(17,17),0)
     (thresh, binarized) = cv2.threshold(blur, 70, 255, cv2.THRESH_BINARY) # se binariza nuevament
     return binarized
 
-def segmentar(file_path):
+def clasificar(file_path):
     global im
     top = Toplevel()
     top.title("U-net Output")
@@ -107,7 +75,7 @@ def segmentar(file_path):
     # reescalamos a tamaño original
     segmented = morph_operator(result)
 
-    io.imsave("output.png",segmented)
+    io.imsave("output-1.png",segmented)
     im=ImageTk.PhotoImage(Image.open("output.png"))
     Label(top, image=im).pack()
  
