@@ -106,15 +106,14 @@ class Preprocess:
         self.cx, self.cy, self.radius = list(zip(pupil_coord, iris_coord))
         texto_pupila = "center of pupil: " + "(" + str(self.cx[0]) +", "+str(self.cy[0])+")\n" + "radius of pupil: " + str(self.radius[0])
         texto_iris = "center of iris: " + "(" + str(self.cx[1]) +", "+str(self.cy[1])+")\n" + "radius of iris: " + str(self.radius[1])
-
+        Label(top,text=texto_pupila).pack()
+        Label(top,text=texto_iris).pack()
         draw = self.draw_circles(cv2.imread(original_sample_path, 0),self.cx,self.cy,self.radius)
         boundaries.append(draw)
         centers.append(pupil_coord)
         io.imsave("coords.png",draw)
         img=ImageTk.PhotoImage(Image.open("coords.png"))
-        Label(top, image=img).pack()
-        Label(top,text=texto_pupila).pack()
-        Label(top,text=texto_iris).pack()
+        Label(top, image=im).pack()
 
     ######SEGMENTATION
 
