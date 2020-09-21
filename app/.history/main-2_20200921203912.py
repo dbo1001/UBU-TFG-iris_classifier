@@ -41,7 +41,6 @@ class Preprocess:
         self.segmented.pack(side=TOP,expand=True)
         self.segmented_sample_path = os.path.join(os.getcwd(),"output.png")
         self.canny_sample_path = os.path.join(os.getcwd(),"output-canny.png")
-        self.cx, self.cy, self.radius=(),(),()
                 
     def upload_image(self):
         try:
@@ -72,7 +71,7 @@ class Preprocess:
                             font=('arial',10,'bold'))
         coords_button.place(relx=0.79,rely=0.50)
 
-    def draw_circles(self,img, cx, cy, radii):
+    def draw_circles(img, cx, cy, radii):
         '''
         A partir de los centros y el radio detectados dibuja el iris sobre la imagen que se le
         pasa como parámetro.
@@ -83,32 +82,27 @@ class Preprocess:
         iris = cv2.circle(image,(cx[1],cy[1]), radii[1], (255, 0, 0), 2)
         return image
 
-    def get_circles(self, borde, original_sample_path):
-        sample_ = cv2.imread(original_sample_path, 0)
-        gray_img = cv2.imread(self.canny_sample_path, 0)
+    def get_circles(borde, original_sample_path):
+        # sample_ = original_sample_path 
+        # gray_img = cv2.imread(path_edged, 0)
         
-        hough_radii = np.arange(20, 80) # pupila por defecto
-        if borde == "iris":
-            hough_radii = np.arange(90, 160) # rango del iris
+        # hough_radii = np.arange(20, 80) # pupila por defecto
+        # if borde == "iris":
+        #     hough_radii = np.arange(90, 160) # rango del iris
         
-        hough_res = hough_circle(gray_img, hough_radii)
-        accums, cx, cy, radii = hough_circle_peaks(hough_res, hough_radii, total_num_peaks=1) 
+        # hough_res = hough_circle(gray_img, hough_radii)
+        # accums, cx, cy, radii = hough_circle_peaks(hough_res, hough_radii, total_num_peaks=1) 
+        # # print(f"center of {borde}: ", (cx[0],cy[0]))
+        # # print(f"radius of {borde}: ", radii[0])
         
-        return [cx[0], cy[0], radii[0]]
-
+        # return [cx[0], cy[0], radii[0]]
+        pass
+    
     def get_coords(self, original_sample_path):
-        top = Toplevel()
-        top.title("Coordinates")
         boundaries,centers = [],[]
-        pupil_coord = self.get_circles("pupil",original_sample_path)
-        iris_coord = self.get_circles("iris",original_sample_path)
-        self.cx, self.cy, self.radius = list(zip(pupil_coord, iris_coord))
-        texto_pupila = "center of pupil: " + "(" + str(self.cx[0]) +", "+str(self.cy[0])+")\n" + "radius of pupil: " + str(self.radius[0])
-        texto_iris = "center of iris: " + "(" + str(self.cx[1]) +", "+str(self.cy[1])+")\n" + "radius of iris: " + str(self.radius[1])
-        Label(top,text=texto_pupila).pack()
-        Label(top,text=texto_iris).pack()
-
-    ######SEGMENTATION
+        pupil_coord = get_circles("pupil",original_sample_path)
+        iris_coord = get_circles("iris",original_sample_path)
+        cx, cy, radius = list(zip(pupil_coord, iris_coord))
 
     def ajustar_input(self,original_sample_path):
         img = cv2.imread(original_sample_path,0)

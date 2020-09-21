@@ -99,14 +99,12 @@ class Preprocess:
     def get_coords(self, original_sample_path):
         top = Toplevel()
         top.title("Coordinates")
+        Label(top,text="llegooooo").pack()
         boundaries,centers = [],[]
-        pupil_coord = self.get_circles("pupil",original_sample_path)
-        iris_coord = self.get_circles("iris",original_sample_path)
+        pupil_coord = get_circles("pupil",original_sample_path)
+        iris_coord = get_circles("iris",original_sample_path)
         self.cx, self.cy, self.radius = list(zip(pupil_coord, iris_coord))
-        texto_pupila = "center of pupil: " + "(" + str(self.cx[0]) +", "+str(self.cy[0])+")\n" + "radius of pupil: " + str(self.radius[0])
-        texto_iris = "center of iris: " + "(" + str(self.cx[1]) +", "+str(self.cy[1])+")\n" + "radius of iris: " + str(self.radius[1])
-        Label(top,text=texto_pupila).pack()
-        Label(top,text=texto_iris).pack()
+        Label(top,text="llegooooo").pack()
 
     ######SEGMENTATION
 
