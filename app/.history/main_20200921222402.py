@@ -14,7 +14,7 @@ import cv2
 import skimage.io as io
 import skimage.transform as trans
 import shutil
-from skimage import data, exposure
+from skimage import data
 from skimage.io import imread, imshow
 from keras.models import load_model
 
@@ -54,11 +54,11 @@ class Preprocess:
             self.sign_image.image=im
 
             # label.configure(text='')
-            self.show_segment_button(original_sample_path)
+            self.show_menu(original_sample_path)
         except:
             pass
 
-    def show_segment_button(self,original_sample_path):
+    def show_menu(self,original_sample_path):
         # segmentación
         segment_button=Button(self.ventana,text="Iris Segmentation", command=lambda: self.segmentar(original_sample_path),padx=10,pady=5)
         segment_button.configure(background='#364156',
@@ -66,32 +66,23 @@ class Preprocess:
                             font=('arial',10,'bold'))
         segment_button.place(relx=0.79,rely=0.40)
 
-    def show_coords_button(self,original_sample_path):
         #coords button
         coords_button=Button(self.ventana,text="Iris Coordinates", command=lambda: self.get_coords(original_sample_path),padx=10,pady=5)
         coords_button.configure(background='#364156',
                             foreground='white',
                             font=('arial',10,'bold'))
         coords_button.place(relx=0.79,rely=0.50)
-    
-    def show_norm_button(self):
-        #normalization button
+
+        #coords button
         norm_button=Button(self.ventana,text="Iris Normalization", command=self.iris_normalization,padx=10,pady=5)
         norm_button.configure(background='#364156',
                             foreground='white',
                             font=('arial',10,'bold'))
         norm_button.place(relx=0.79,rely=0.60)
-        
-    ############### NORMALIZATION ###########################
-    def crop_and_ecualization(self,normalized):
-        img = normalized
-        h,w = img.shape
-        roi = img[5:h, 0:int(512/2)]
-        roi_enhanced = exposure.equalize_hist(roi)
-        return roi_enhanced
 
+    ############### NORMALIZATION ###########################
     def iris_normalization(self):
-        global img_norm, img_enh
+        global img_norm
         top = Toplevel()
         top.title("Normalization")
         normalized = []
@@ -126,11 +117,8 @@ class Preprocess:
             normalized.append(res)
             cent+=1
         io.imsave("normalized.png",normalized[0])
-        io.imsave("normalized-enhanced.png",self.crop_and_ecualization(normalized[0]))
-        img_norm=ImageTk.PhotoImage(Image.open("normalized.png"))
+        img_norm=ImageTk.PhotoImage(Image.open("normalized.png",))
         Label(top, image=img_norm).pack()
-        img_enh=ImageTk.PhotoImage(Image.open("normalized-enhanced.png"))
-        Label(top, image=img_enh).pack()
 
     ###############LOCATE COORDS########################
     def draw_circles(self,img, cx, cy, radii):
@@ -176,7 +164,6 @@ class Preprocess:
         Label(top, image=img_coord).pack()
         Label(top,text=texto_pupila).pack()
         Label(top,text=texto_iris).pack()
-        self.show_norm_button()
 
     ###### SEGMENTATION ######################
 
@@ -208,8 +195,6 @@ class Preprocess:
         io.imsave(self.canny_sample_path,cannied)
         im=ImageTk.PhotoImage(Image.open(self.segmented_sample_path))
         Label(top, image=im).pack()
-
-        self.show_coords_button(original_sample_path)
  
 
 

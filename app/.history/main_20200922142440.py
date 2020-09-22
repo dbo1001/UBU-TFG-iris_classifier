@@ -66,6 +66,14 @@ class Preprocess:
                             font=('arial',10,'bold'))
         segment_button.place(relx=0.79,rely=0.40)
 
+        #normalization button
+        norm_button=Button(self.ventana,text="Iris Normalization", command=self.iris_normalization,padx=10,pady=5)
+        norm_button.configure(background='#364156',
+                            foreground='white',
+                            font=('arial',10,'bold'))
+        norm_button.place(relx=0.79,rely=0.60)
+
+
     def show_coords_button(self,original_sample_path):
         #coords button
         coords_button=Button(self.ventana,text="Iris Coordinates", command=lambda: self.get_coords(original_sample_path),padx=10,pady=5)
@@ -73,15 +81,7 @@ class Preprocess:
                             foreground='white',
                             font=('arial',10,'bold'))
         coords_button.place(relx=0.79,rely=0.50)
-    
-    def show_norm_button(self):
-        #normalization button
-        norm_button=Button(self.ventana,text="Iris Normalization", command=self.iris_normalization,padx=10,pady=5)
-        norm_button.configure(background='#364156',
-                            foreground='white',
-                            font=('arial',10,'bold'))
-        norm_button.place(relx=0.79,rely=0.60)
-        
+
     ############### NORMALIZATION ###########################
     def crop_and_ecualization(self,normalized):
         img = normalized
@@ -176,7 +176,6 @@ class Preprocess:
         Label(top, image=img_coord).pack()
         Label(top,text=texto_pupila).pack()
         Label(top,text=texto_iris).pack()
-        self.show_norm_button()
 
     ###### SEGMENTATION ######################
 

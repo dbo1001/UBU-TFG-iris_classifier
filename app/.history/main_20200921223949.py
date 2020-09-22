@@ -54,11 +54,11 @@ class Preprocess:
             self.sign_image.image=im
 
             # label.configure(text='')
-            self.show_segment_button(original_sample_path)
+            self.show_menu(original_sample_path)
         except:
             pass
 
-    def show_segment_button(self,original_sample_path):
+    def show_menu(self,original_sample_path):
         # segmentación
         segment_button=Button(self.ventana,text="Iris Segmentation", command=lambda: self.segmentar(original_sample_path),padx=10,pady=5)
         segment_button.configure(background='#364156',
@@ -66,22 +66,20 @@ class Preprocess:
                             font=('arial',10,'bold'))
         segment_button.place(relx=0.79,rely=0.40)
 
-    def show_coords_button(self,original_sample_path):
         #coords button
         coords_button=Button(self.ventana,text="Iris Coordinates", command=lambda: self.get_coords(original_sample_path),padx=10,pady=5)
         coords_button.configure(background='#364156',
                             foreground='white',
                             font=('arial',10,'bold'))
         coords_button.place(relx=0.79,rely=0.50)
-    
-    def show_norm_button(self):
+
         #normalization button
         norm_button=Button(self.ventana,text="Iris Normalization", command=self.iris_normalization,padx=10,pady=5)
         norm_button.configure(background='#364156',
                             foreground='white',
                             font=('arial',10,'bold'))
         norm_button.place(relx=0.79,rely=0.60)
-        
+
     ############### NORMALIZATION ###########################
     def crop_and_ecualization(self,normalized):
         img = normalized
@@ -176,7 +174,6 @@ class Preprocess:
         Label(top, image=img_coord).pack()
         Label(top,text=texto_pupila).pack()
         Label(top,text=texto_iris).pack()
-        self.show_norm_button()
 
     ###### SEGMENTATION ######################
 
@@ -208,8 +205,6 @@ class Preprocess:
         io.imsave(self.canny_sample_path,cannied)
         im=ImageTk.PhotoImage(Image.open(self.segmented_sample_path))
         Label(top, image=im).pack()
-
-        self.show_coords_button(original_sample_path)
  
 
 

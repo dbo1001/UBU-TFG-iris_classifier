@@ -14,7 +14,7 @@ import cv2
 import skimage.io as io
 import skimage.transform as trans
 import shutil
-from skimage import data, exposure
+from skimage import data
 from skimage.io import imread, imshow
 from keras.models import load_model
 
@@ -41,7 +41,6 @@ class Preprocess:
         self.segmented.pack(side=TOP,expand=True)
         self.segmented_sample_path = os.path.join(os.getcwd(),"output.png")
         self.canny_sample_path = os.path.join(os.getcwd(),"output-canny.png")
-        self.boundaries,self.centers = [],[]
         self.cx, self.cy, self.radius=(),(),()
                 
     def upload_image(self):
@@ -54,11 +53,11 @@ class Preprocess:
             self.sign_image.image=im
 
             # label.configure(text='')
-            self.show_segment_button(original_sample_path)
+            self.show_menu(original_sample_path)
         except:
             pass
 
-    def show_segment_button(self,original_sample_path):
+    def show_menu(self,original_sample_path):
         # segmentación
         segment_button=Button(self.ventana,text="Iris Segmentation", command=lambda: self.segmentar(original_sample_path),padx=10,pady=5)
         segment_button.configure(background='#364156',
@@ -66,73 +65,13 @@ class Preprocess:
                             font=('arial',10,'bold'))
         segment_button.place(relx=0.79,rely=0.40)
 
-    def show_coords_button(self,original_sample_path):
         #coords button
         coords_button=Button(self.ventana,text="Iris Coordinates", command=lambda: self.get_coords(original_sample_path),padx=10,pady=5)
         coords_button.configure(background='#364156',
                             foreground='white',
                             font=('arial',10,'bold'))
         coords_button.place(relx=0.79,rely=0.50)
-    
-    def show_norm_button(self):
-        #normalization button
-        norm_button=Button(self.ventana,text="Iris Normalization", command=self.iris_normalization,padx=10,pady=5)
-        norm_button.configure(background='#364156',
-                            foreground='white',
-                            font=('arial',10,'bold'))
-        norm_button.place(relx=0.79,rely=0.60)
-        
-    ############### NORMALIZATION ###########################
-    def crop_and_ecualization(self,normalized):
-        img = normalized
-        h,w = img.shape
-        roi = img[5:h, 0:int(512/2)]
-        roi_enhanced = exposure.equalize_hist(roi)
-        return roi_enhanced
 
-    def iris_normalization(self):
-        global img_norm, img_enh
-        top = Toplevel()
-        top.title("Normalization")
-        normalized = []
-        cent=0
-        for img in self.boundaries:
-    #         img = normalized[name]
-            #load pupil centers and radius of inner circles
-            center_x = self.centers[cent][0]
-            center_y = self.centers[cent][1]
-            radius_pupil=int(self.centers[cent][2])
-            
-            iris_radius = 53 # width of space between inner and outer boundary
-        
-            #define equally spaced interval to iterate over
-            nsamples = 360
-            samples = np.linspace(0,2*np.pi, nsamples)[:-1]
-            polar = np.zeros((iris_radius, nsamples))
-            for r in range(iris_radius):
-                for theta in samples:
-                    #get x and y for values on inner boundary
-                    x = (r+radius_pupil)*np.cos(theta)+center_x
-                    y = (r+radius_pupil)*np.sin(theta)+center_y
-                    x=int(x)
-                    y=int(y)
-                    try:
-                    #convert coordinates
-                        polar[r][int((theta*nsamples)/(2*np.pi))] = img[y][x]
-                    except IndexError: #ignores values which lie out of bounds
-                        pass
-                    continue
-            res = cv2.resize(polar,(512,64))
-            normalized.append(res)
-            cent+=1
-        io.imsave("normalized.png",normalized[0])
-        io.imsave("normalized-enhanced.png",self.crop_and_ecualization(normalized[0]))
-        img_norm=ImageTk.PhotoImage(Image.open("normalized.png"))
-        Label(top, image=img_norm).pack()
-        img_enh=ImageTk.PhotoImage(Image.open("normalized-enhanced.png"))
-        Label(top, image=img_enh).pack()
-
-    ###############LOCATE COORDS########################
     def draw_circles(self,img, cx, cy, radii):
         '''
         A partir de los centros y el radio detectados dibuja el iris sobre la imagen que se le
@@ -158,10 +97,10 @@ class Preprocess:
         return [cx[0], cy[0], radii[0]]
 
     def get_coords(self, original_sample_path):
-        global img_coord
+        global img
         top = Toplevel()
         top.title("Coordinates")
-        
+        boundaries,centers = [],[]
         pupil_coord = self.get_circles("pupil",original_sample_path)
         iris_coord = self.get_circles("iris",original_sample_path)
         self.cx, self.cy, self.radius = list(zip(pupil_coord, iris_coord))
@@ -169,16 +108,15 @@ class Preprocess:
         texto_iris = "center of iris: " + "(" + str(self.cx[1]) +", "+str(self.cy[1])+")\n" + "radius of iris: " + str(self.radius[1])
 
         draw = self.draw_circles(cv2.imread(original_sample_path, 0),self.cx,self.cy,self.radius)
-        self.boundaries.append(draw)
-        self.centers.append(pupil_coord)
+        boundaries.append(draw)
+        centers.append(pupil_coord)
         io.imsave("coords.png",draw)
-        img_coord=ImageTk.PhotoImage(Image.open("coords.png"))
-        Label(top, image=img_coord).pack()
+        img=ImageTk.PhotoImage(Image.open("coords.png"))
+        Label(top, image=img).pack()
         Label(top,text=texto_pupila).pack()
         Label(top,text=texto_iris).pack()
-        self.show_norm_button()
 
-    ###### SEGMENTATION ######################
+    ######SEGMENTATION
 
     def ajustar_input(self,original_sample_path):
         img = cv2.imread(original_sample_path,0)
@@ -208,8 +146,6 @@ class Preprocess:
         io.imsave(self.canny_sample_path,cannied)
         im=ImageTk.PhotoImage(Image.open(self.segmented_sample_path))
         Label(top, image=im).pack()
-
-        self.show_coords_button(original_sample_path)
  
 
 
