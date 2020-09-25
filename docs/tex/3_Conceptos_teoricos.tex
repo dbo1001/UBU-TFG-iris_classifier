@@ -1,10 +1,10 @@
 \capitulo{3}{Conceptos teóricos}
 
 \section{Anatomía del iris}
-El iris se corresponde con la parte coloreada del ojo, se trata de un músculo circular(o elíptico) protegido por la córnea en cuyo centro se encuentra la pupila. Consta de 2 músculos el \emph{dilatador} y el \emph{esfínter} cuya función es ajustar el tamaño del iris para controlar la cantidad de luz que entra en la pupila.
+El iris se corresponde con la parte coloreada del ojo, se trata de un músculo circular (o elíptico) protegido por la córnea en cuyo centro se encuentra la pupila. Consta de 2 músculos el \emph{dilatador} y el \emph{esfínter} cuya función es ajustar el tamaño del iris para controlar la cantidad de luz que entra en la pupila.
 El conjunto iris-pupila se encuentra rodeado por una membrana de color blanco llamada \emph{esclera}. Ver Figura \ref{fig:eye-anatomy}
 
-El color, la textura y los patrones del iris son únicos y se cree que se forman aleatoriamente durante el periodo embrionario(etapa comprendida entre fecundación y la octava semana de embarazo), de modo que incluso 2 gemelos genéticamente iguales tienen distintos patrones.
+El color, la textura y los patrones del iris son únicos y se cree que se forman aleatoriamente durante el periodo embrionario (etapa comprendida entre fecundación y la octava semana de embarazo), de modo que incluso 2 gemelos genéticamente iguales tienen distintos patrones.
 
 En un entorno con mucha luz el esfínter contrae la pupila, dejando pasar menos luz a la retina, mientras que en un entorno poco iluminado, el músculo dilatador, dilata la pupila para permitir la entrada de más luz.
 El ojo está protegido externamente por los párpados y las pestañas, sin embargo suponen un problema ya que pueden ocultar significativamente el iris y por tanto resultar en un mal reconocimiento.
@@ -15,6 +15,53 @@ El ojo está protegido externamente por los párpados y las pestañas, sin embar
 %\end{figure}
 %\newpage
 \imagen{eye-anatomy}{Imagen 001\_1\_1.bmp del dataset CASIA-Iris V1 que muestra las partes del ojo.}
+
+\section{Machine Learning}
+El \emph{Machine Learning} es la rama de la Inteligencia Artificial que se encarga del desarrollo de técnicas que permitan extraer por sí mismos los patrones y relaciones existentes en los datos, es decir, su objetivo es conseguir que las máquinas aprendan sin necesidad de intervención humana ~\cite{wiki:2020,valdez:2018}.
+
+A partir de unos datos de entrada (\emph{input/X}), y un resultado esperado para esos datos(\emph{outputs/y}), un algoritmo de \emph{Machine Learning} analizará las posibles relaciones entre estos y aprenderá de ellas (se entrenará) para realizar predicciones futuras.
+\subsection{Tipos de Machine Learning}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Aprendizaje supervisado} este tipo de algoritmos generan una función que establece una relación entre los datos de entrada y las salidas deseadas (etiquetas/\emph{labels}).
+  Existen 2 tipos:
+  \begin{itemize}
+      \item\textbf{Clasificadores: }clasifican los datos de entrada en grupos o clases. Existen 2 tipos de problemas de clasificación:
+        \begin{itemize}
+             \item\textbf{Binario: }existen únicamente 2 clases (0/1, \emph{true}/\emph{false}, o positivo/negativo)
+              \item\textbf{Multiclase: }existen 3 o más clases.
+        \end{itemize}
+      \item\textbf{Regresores: }predicen un valor o cantidad.
+  \end{itemize}
+\item
+  \textbf{Aprendizaje no supervisado} estos algoritmos sólo disponen de los datos de entrada, por lo que extraerán los patrones de los datos sin tener referencia alguna. Un ejemplo de este tipo de aprendizaje es el agrupamiento o \emph{clustering}
+ \item
+  \textbf{Aprendizaje por refuerzo} abarcan aquellos algoritmos que implementa un sistema de recompensas en función de las decisiones tomadas por un agente influenciado por el medio o entorno que le rodea.
+\end{itemize}
+
+En este proyecto se hará uso del \emph{Aprendizaje supervisado}, en el que tendremos como \emph{inputs} los atributos del iris, y cómo etiquetas, los nombres del individuo al que pertenecen dichos atributos.
+Así mismo se planteará como un problema de clasificación multiclase en el que se cuenta concretamente con 108 clases que se corresponderan con los 108 individuos del dataset de CASIA V1 \ref{adquisicion_label}
+
+Para la última fase del proceso del reconocimiento se usarán 4 clasificadores:
+\begin{itemize}
+\tightlist
+    \item\textbf{Support Vector Machines }
+    \item\textbf{Logistic Regression}
+    \item\textbf{Nearest Neighbours} 
+    \item\textbf{Random Forest}
+\end{itemize}
+
+\section{Deep Learning} \label{deep_learning}
+Las algoritmos de \emph{Machine Learning} convencionales están limitados por su capacidad para procesar los datos de entrada.
+
+Como alternativa surge el llamado \emph{Deep Learning} el cual permite desarrollar modelos computacionales compuestos internamente por múltiples capas de procesamiento.
+
+\imagen{nn}{Red Neuronal ~\cite{sunil:2020}}
+
+A la primera capa de la red se la denomina \emph{capa de entrada} y contiene las variables de entrada, le siguen una serie de capas intermedias denominadas \emph{capas ocultas}, donde las neuronas que se encuentren en la misma capa, recibiran la información procesada por la capa anterior y los cálculos que realice en dicha capa los pasará a la siguiente.
+Finalmente está la \emph{capa de salida} que nos proporcionará el resultado de la red.
+
 \section{Fases del reconocimiento}
 Un sistema de reconocimiento tiene 3 fases:
 \begin{enumerate}
@@ -25,71 +72,74 @@ Un sistema de reconocimiento tiene 3 fases:
 	\begin{enumerate}
 		\item Segmentación.
 		\item Normalización.
-		\item Extracción de \emph{features}(patrones del iris)
+		\item Extracción de atributos/\emph{features} (patrones del iris)
 	\end{enumerate}
 	\item Clasificación de las imágenes.
 
 \end{enumerate}
 
-\section{Adquisición de imágenes}
+\section{Adquisición de imágenes} \label{adquisicion_label}
 Es la primera de todas las fases y también la más trascendental ya que es necesario que las muestras tengan la calidad necesaria para que la posterior extracción de patrones sea eficiente.
 
-Las muestras de un iris se toman con cámaras desarrolladas específicamente para este propósito si bien para este proyecto no se contaba con este hardware se podría haber optado por usar una cámara convencional(\emph{añadir referencia diabetes bachillerato}), pero ello incluiría otro problema: conseguir muestras de un gran número de voluntarios.
-Para evitarse los problemas mencionados se optó por usar un dataset de iris, concretamente el de CASIA en su versión 1(\emph{añadir link a CASIA}) la cual está disponible de forma gratuita mediante registro y autorización previa.
+Las muestras de un iris se toman con cámaras desarrolladas específicamente para este propósito si bien para este proyecto no se contaba con este hardware se podría haber optado por usar una cámara convencional ~\cite{sanbishig:2017}, pero ello incluiría otro problema: conseguir muestras de un gran número de voluntarios.
+Para evitarse los problemas mencionados se optó por usar un dataset de iris, concretamente el de CASIA en su versión 1 ~\cite{casia:1} el cual está disponible de forma gratuita mediante registro y autorización previa.
 
 Este dataset cuenta con 756 imágenes del iris de 108 sujetos. La toma de muestras se realizó en 2 sesiones, tomándose 3 muestras en la primera sesión y 4 en la segunda, de modo que se cuenta con un total de 7 muestras por sujeto.
 Cada muestra está en formato \emph{.bmp} y tienen una resolución de 320x280.
 Para la toma de muestras usaron una cámara desarrollada por la propia CASIA.
 \imagen{casia-camera}{Toma de muestras para el dataset CASIA-Iris-V1}
-Con el objetivo de facilitar la detección de los bordes del iris, las muestras se han editado, de modo que se han eliminado los reflejos especulares(\emph{añadir pie de página con definición}).
+Con el objetivo de facilitar la detección de los bordes del iris, las muestras se han editado, de modo que se han eliminado los reflejos especulares~\footnote{Son las regiones más brillantes de la muestra del ojo, es decir, aquellos pixeles con valores iguales a 0. La superficie reflectante de la córnea y la fuente de luz usada para tomar la muestra son la principal causa de la aparición de estos reflejos.}.
 
-Cabe recalcar que dichas ediciones son mínimas y se aplican únicamente en la pupila, la cual no proporciona ninguna información útil para las etapas posteriores de extracción y clasificación de los patrones del iris.(\emph{añadir referferencia a image understanding for irsi.... }
+Cabe recalcar que dichas ediciones son mínimas y se aplican únicamente en la pupila ~\cite{kumar:2019}, la cual no proporciona ninguna información útil para las etapas posteriores de extracción y clasificación de los patrones del iris ~\cite{bowyer:2008}.
 \imagen{specular}{Imagen S1143R01.jpg perteneciente CASIA-Interval-V3 con regiones especulares(izquierda). Imagen 001\_1\_1.bmp de CASIA-Iris-V1 sin regiones especulares(derecha)}
 
 \section{Preprocesamiento}
-Como puede apreciarse en la figura de la derecha de la imagen \ref{fig:specular}, la muestra es del ojo completo, pero para el reconocimiento únicamnete nos interesa la regíón del iris, por lo que elementos como pestañas, párpados, esclera \emph{etc} han de eliminarse ya que no aportan nada.
-Así mismo dependiendo de las condiciones en las que se tomaron las muestras es posible que el tamaño de los iris varíe debido a la dilatación o la contracción de la pupila.
+Como puede apreciarse en la figura de la derecha de la imagen ~\ref{fig:specular}, la muestra es del ojo completo, pero para el reconocimiento únicamnete nos interesa la región del iris, por lo que elementos como pestañas, párpados, esclera \emph{etc} han de eliminarse ya que no aportan nada.
+Así mismo dependiendo de las condiciones en las que se tomaron las muestras es posible que el tamaño de los iris varíen debido a la dilatación o la contracción de la pupila.
 
-Es por ellos que ha de procesarse la imagen para localizar y aislar el iris(\emph{segmentar}) y ajustarlo a un tamaño estándar(\emph{normalizar})
+Es por ellos que ha de procesarse la imagen para localizar y aislar el iris (\emph{segmentar}) y ajustarlo a un tamaño estándar (\emph{normalizar})
 
 
 \subsection{Segmentación}
-En esta etapa se requiere detectar de manera automática los bordes \emph{límbico} y \emph{pupilar} del ojo aislando la región del iris y excluyendo el resto de la imagen, es decir, se busca el \emph{ROI(Region of interest)}
+En esta etapa se requiere detectar de manera automática los bordes \emph{límbico} y \emph{pupilar} del ojo aislando la región del iris y excluyendo el resto de la imagen, es decir, se busca el \emph{ROI (Region of interest)}
 
-El iris se corresponde con la región circular comprendido entre la pupila y la esclera.a
+El iris se corresponde con la región circular comprendido entre la pupila y la esclera.
 La mayoría de fallos en un sistema de reconocimiento de iris se debe a una segmentación deficiente de las imágenes, por lo que se han de tener en cuenta los siguientes factores:
 \begin{itemize}
-    \item El iris se encuetra obstruido por pestañas, párpados y reflejos especulares.
+    \item El iris se encuentra obstruido por pestañas, párpados y reflejos especulares.
     \item Tanto iris como pupila no son siempre circulares sino que pueden tener forma elíptica, y su forma puede variar dependiendo de la forma en que se tome la muestra.
     \item Factores cómo muestras desenfocadas, con mucho ruido, poca calidad.. (estos han de tenerse en cuenta en la etapa de adquisición de imágenes)
 \end{itemize}
 
-\imagen{segmentado}{Detección incorrecta de los bordes límbico y pupilar (izquierda) y la correcta(derecha)}
+\imagen{segmentado}{Detección incorrecta de los bordes límbico y pupilar (izquierda) y la correcta (derecha)}
 Como se ha dicho anteriormente, los algoritmos de Daugman son la base de los sistemas de reconocimiento actuales, pero no son los únicos métodos existentes.
 
 \begin{itemize}
     \item\textbf{Operador Integro-Diferencial de Daugman:} Daugman propuso el primer modelo funcional para un sistema de reconocimiento de iris y consiste en un detector de bordes circulares que busca el máximo valor del cambio de tonalidad en la imagen utilizando la integral de línea de varios círculos concéntricos.
     
-    El operador viene determinado por la siguiente ecuación:
+    El operador viene determinado por la siguiente ecuación~\cite{kazakov:2011}:
     
     \emph{añdir refrencia iris detection and noramlization[4]}
     \begin{equation*}
     \max_{\substack(r,x_{0},y_{0})}\left | G_{\sigma }(r)*\frac{\partial }{\partial x}\oint_{(r,x_{0},y_{0})} \frac{I(x,y)}{2\pi r}ds \right |
     \end{equation*}
-    donde $I(x,y)$ se corresponde con la imagen del ojo, $ds$ es el arco diferencial del círculo de radio $r$ y coordenadas $(x_{0},y_{0})$. $G_{\sigma}$
-    es una función que suaviza la imagen como un filtro Gaussiano de tamaño $\sigma$. Dado que utiliza información derivativa de primer orden, se computa muy rápidamente.\emph{refrencia a http://repositorio.uchile.cl/handle/2250/132304}
-    \textbf{NOTA JOHNSON: no voy a usar ese método, sin embargo lo he puesto solo de relleno cosa que no sé si está bien o mal, además soy incapaz de comprender la ecuación en sí misma, así que he copiado literalmente lo que aparecía en el artículo citado}
+    donde la intendidad del pixel en las coordenadas $I(x,y)$ se corresponde con la imagen del ojo, $ds$ es el arco diferencial del círculo de radio $r$ y coordenadas $(x_{0},y_{0})$. $G_{\sigma}$
+    es una función que suaviza la imagen como un filtro Gaussiano de tamaño $\sigma$. Dado que utiliza información derivativa de primer orden, se computa muy rápidamente ~\cite{yonekura:2014}.
+    
+    Lo que hace la ecuación es encontrar el máximo cambio entre las intensidades medias de dos circunferencias concéntricas consecutivas. En el borde entre el iris y la esclera este cambio será máximo porque la última circunferencia concéntrica del iris será oscura y la primera de la esclera será blanca. Dicho cambio viene dado con la derivada.
+    
+    La media de todos los píxeles de cada una de las posibles circunferencias concéntricas viene de la integral de la división entre la intensidad y $2 \pi r$ ya que esa es la longitud de la circunferencia.
+    
     \item\textbf{Transformada de Hough:} parte de la idea de que los bordes límbico y pupilar pueden ser considerados como círculos, la Transformada de Hough original se usaba en un principio para la detección de líneas en una imagen, sin embargo más adelante se extendió para que pudiera reconocer también circulos y circunferencias, pasó a denominarse \emph{Transformada de Hough Circular}.
-    Su funcionamietno es el siguiente:
-    Primero se genera el \emph{edge map} de la imagen mediante el cáclculo de la primera derivada de las intensidades de los valores y a continuación se establece un umbral umbral\emph{thresholding}. Posteriormente se suaviza la muestra con un filtro Gaussiano.
     
-    \textbf{NOTA JOHNSON: sé lo que hace, pero no sé cómo traducirlo ya que es muy técnico, referencia-> Iris detection and normalization}
+    Su funcionamiento es el siguiente:
+    Primero se realzan los bordes para generar el \emph{edge map} de la imagen mediante el cálculo de la primera derivada de las intensidades de los píxeles y a continuación se establece un valor que permita anotar como bordes los cambios de intensidad superiores a dicho valor (umbral/\emph{thresholding}). Posteriormente se suaviza la muestra con un filtro Gaussiano.
     
-    \item\textbf{Detectector de bordes de Canny:} se basa en detección de contornos mediante el uso de máscaras de convolución y el cálculo de la primera derivada.
-    Los puntos que conforman los bordes detectados se consideran zonas de píxeles en los que existe un cambio brusco del nivel de gris\emph{referencia a Detección de bordes mediante el algoritmo de Canny}
+    \item\textbf{Detector de bordes de Canny:} se basa en detección de contornos mediante el uso de máscaras de convolución y el cálculo de la primera derivada.
+    Los puntos que conforman los bordes detectados se consideran zonas de píxeles en los que existe un cambio brusco del nivel de gris ~\cite{valverde:2007}
 \end{itemize}
 
-El método seguido para la realización de este proyecto se basa en el propuesto por Wildes \emph{referencia Iris recognition: an emerging biometric technology.} 
+El método seguido para la realización de este proyecto se basa en el propuesto por Wildes ~\cite{ganorkar:2007}
 
 Wildes propone utilizar el detector de bordes de Canny seguido de la Transformada de Hough Circular, la combinación de ambos métodos proporciona resultados que pueden superar a los de Daugman.
 
@@ -113,17 +163,149 @@ El proceso de detección del borde límbico se corresponde con la primera iterac
 \imagen{draw-lines-pupilar}{Circunferencia interior dibujada sobre el \emph{edge map} y sobre la muestra original.}
 
 
-Para ejemplificar el proceso que se ha de seguir para encontrarr los bordes, se ha trabajado sobre la muestra \emph{001\_1\_1.bmp} de CASIA-Iris-V1, aunque a priori parecía que el proceso desarrollado podría aplicarse a todas las muestras del dataset, más tarde se comprobó que no era así ya que existían fallos principlamente para detectar el borde exterior.
-\subsection{Detección de bordes errónea}
+Para ejemplificar el proceso que se ha de seguir para encontrar los bordes, se ha trabajado sobre la muestra \emph{001\_1\_1.bmp} de CASIA-Iris-V1, aunque a priori parecía que el proceso desarrollado podría aplicarse a todas las muestras del dataset, más tarde se comprobó que no era así ya que existían fallos principlamente para detectar el borde exterior.
+\subsubsection{Detección errónea del borde límbico}
 \imagen{wrong-borders-2}{Imagen \emph{002\_1\_1.bmp}, debido a la mala binarización interpreta la pupila como el iris.}
-\imagen{wrong-borders-pupil-2}{Imagen \emph{002\_1\_1.bmp}, pupila detectada correctamente}
+
 \imagen{wrong-borders-8}{Imagen \emph{008\_1\_1.bmp}, debido a la mala binarización dibuja la circunferencia en una región aleatoria.}
+Ahora si se quiere detectar el borde pupilar de las 2 muestras anteriores se observa que lo hace correctamente.
+
+\imagen{wrong-borders-pupil-2}{Imagen \emph{002\_1\_1.bmp}, pupila detectada correctamente}
+
 \imagen{wrong-borders-pupil-8}{Imagen \emph{008\_1\_1.bmp}, pupila detectada correctamente.}
 
 Por lo tanto se llega a la conclusión que es posible aplicar un \emph{thresholding} común para todas las muestras pero únicamente para la detección de la pupila, mientras que para la detección del iris, se deberá ir probando constantemente hasta encontrar el apropiado para cada imagen, esto se correspondería con una técnica de fuerza bruta muy ineficiente, que podría ser factible si se cuenta con un dataset pequeño, pero para el de CASIA que cuenta con 108 muestras no lo es.
 
-Para paliar este problema se emplea una \emph{red neuronal preentrenada -> enlace https://github.com/jus390/U-net-Iris-segmentation} que permitirá la segmentación automática.
+Para solucionar este problema se decidió usar el modelo  preentrenado \emph{U-Net} que se encargará de la segmentación automática del iris ~\cite{ronnenberger:2015, lozej:2018}.
+
+\imagen{u-net}{El modelo \emph{U-Net} se trata de una Red Neuronal Convulocional usado en problemas biomédicos para la segmentación de diferentes tipos de células y la detección de sus bordes. }
+
+La principal ventaja que aporta el uso del modelo mencionado es la capacidad de entrenar modelos precisos a partir de un \emph{dataset} pequeño, lo cuál es un problema muy frecuente en problemas de visión computarizada y en la que por supuesto se incluye la segmentación del iris ~\cite{waisy:2017}.
+
+El hecho de usar el modelo previamente entrenado aceleró mucho el proceso ya que para usarlo únicamente se necesitaba ajustar la muestra al \texttt{input\_shape} del modelo y usar el método \texttt{predict()} ~\cite{jus390:2019} 
+
+\imagen{outputs-unet}{Output generado para las muestras \emph{001\_1\_1.bmp}, \emph{005\_2\_4.bmp}, \emph{008\_2\_4.bmp}, con dimensiones 320x320.}
+
+El modelo preentrenado segmenta bien los iris, pero como las dimensiones no se correspondían con las de las muestras orginales se las volvió a redimensionar a 320x280 para ya posteriormente aplicar el detector de bordes de Canny.
+
+\imagen{outputs-circles}{Bordes detectados(\emph{edge map} con Canny (arriba). Coordenadas de los bordes límbico y pupilar dibujadas sobre el \emph{edge map} }
+Ahora solo queda dibujar las mismas coordenadas encontradas en las muestras para hacernos una idea de la región con la que trabajaremos en la posterior etapa de normalización.
+
+\imagen{coords}{Detectados bordes límbico y pupilar.}
+
+Llegados a este punto se decidió cambiar los nombres a las muestras para que el etiquetado sea más intuitivo, de modo que se le asignaron nombres reales de un fichero .csv disponible en \emph{Kaggle}, por ejemplo, la muestra \emph{001\_1\_1.bmp} se renombró con \emph{Adrianna\_1}, \emph{005\_1\_1.bmp} con \emph{Aleah\_1} y \emph{005\_1\_1.bmp} con \emph{Amayah\_1}.
+
+
+\begin{table}[h]
+    \centering
+        \begin{tabular}{lrrrrrrl}
+        \toprule
+                  Image &  pupil cx &  pupil cy &  pupil radius &  iris cx &  iris cy &  iris radius &     Clase \\
+        \midrule
+         Adrianna\_1.bmp &             182 &             134 &            33 &            176 &            135 &          105 &  Adrianna \\
+         Adrianna\_2.bmp &             173 &             138 &            35 &            169 &            140 &          104 &  Adrianna \\
+         Adrianna\_3.bmp &             174 &             120 &            35 &            168 &            121 &          107 &  Adrianna \\
+         Adrianna\_4.bmp &             183 &             122 &            37 &            179 &            122 &          104 &  Adrianna \\
+         Adrianna\_5.bmp &             177 &             145 &            35 &            173 &            149 &          109 &  Adrianna \\
+         Adrianna\_6.bmp &             179 &             133 &            36 &            177 &            136 &          108 &  Adrianna \\
+         Adrianna\_7.bmp &             154 &             131 &            33 &            157 &            137 &          100 &  Adrianna \\
+           Aharon\_1.bmp &             181 &             141 &            47 &            158 &            138 &           93 &    Aharon \\
+           Aharon\_2.bmp &             184 &             139 &            45 &            186 &            134 &          118 &    Aharon \\
+           Aharon\_3.bmp &             172 &             155 &            44 &            145 &            159 &           90 &    Aharon \\
+        \bottomrule
+        \end{tabular}
+    \caption{Centros y radios aproximados para cada una de las muestras del dataset CASIA v1.}
+    \label{tab:my_label}
+\end{table}
+
+
+\subsection{Normalización}
+Una vez localizadas las coordenadas del iris en la etapa anterior se lleva a cabo la normalización del iris en la que se genera imágenes del iris, todas ellas con las mismas dimensiones de modo que permita su comparación con otros iris ~\cite{daugman:1993,aksha:2019,alvarg:2020}
+
+Este método elimina las incosistencias de tamaño entre las mismas muestras que se pueden generar debido al estrechamiento o ensanchamiento de la pupila ("tendremos menos o más región útil de la que extraer atributos") como respuesta a factores externos como la iluminación.
+
+Para normalizar el iris se usará el método de Daugman, el cual permitirá transformar el iris de coordenadas cartesiana a polares, es decir, transforma la region circular del iris en una rectangular de dimensiones constantes ~\cite{terissi:2000}
+\imagen{rubber}{Método de Daugman para normalizar. Iris original (izquierda). Iris normalizado (derecha)}
+
+\imagen{norm}{Muestras normalizadas, de arriba a abajo, \emph{Adrianna}, \emph{Aleah}, \emph{Amayah}}
+
+Se observa que en las muestras normalizadas nos aparecen regiones que no aportan nada, en este caso correspondientes a párpados y pestañas y sólo pueden entorpecer la posterior clasificación, por lo que se ha decidido que la \emph{ROI} será la mitad de la muestra en la que no hay estorbos, ya que con esa región es suficiente para extraer los atributos de la superficie del iris.
+\imagen{enh}{\emph{ROI}}
+
+\subsection{Extracción de atributos}
+Con las muestras ya normalizadas ahora se procede a la extracción de atributos de la superficie del iris, aunque los métodos tradicionales como \emph{Filtros de Gabor} ~\cite{gabor:1946} o la \emph{Transformada de Wavelet} ~\cite{abdullah:2015} entre otros, han sido y son los más ampliamente usados, se ha optado para este proyecto el uso de modelos de \emph{Deep Learning} ~\cite{alaslni:2019, waisy:2017,alvarg:2020}
+
+Los modelos se tomarán de la biblioteca de \emph{deep learning} \emph{Keras} ~\cite{keras:api}, la cual ofrece una amplia variedad de modelos implementados y entrenados.
+\begin{table}[h!]
+    \centering
+        \begin{tabular}{llrrr}
+        \toprule
+                   Name &     Class &   VGG16\_0 &  InceptionV3\_0 &  ResNet50\_0 \\
+        \midrule
+         Adrianna\_1.bmp &  Adrianna &  0.183428 &       0.000724 &    0.007881 \\
+         Adrianna\_2.bmp &  Adrianna &  0.148888 &       0.000720 &    0.008597 \\
+         Adrianna\_3.bmp &  Adrianna &  0.138908 &       0.000677 &    0.007178 \\
+         Adrianna\_4.bmp &  Adrianna &  0.123969 &       0.000734 &    0.008140 \\
+         Adrianna\_5.bmp &  Adrianna &  0.157805 &       0.000744 &    0.009871 \\
+         Adrianna\_6.bmp &  Adrianna &  0.154508 &       0.000719 &    0.007440 \\
+         Adrianna\_7.bmp &  Adrianna &  0.164218 &       0.000720 &    0.005831 \\
+           Aharon\_1.bmp &    Aharon &  0.166655 &       0.000796 &    0.006227 \\
+           Aharon\_2.bmp &    Aharon &  0.127383 &       0.000712 &    0.007649 \\
+           Aharon\_3.bmp &    Aharon &  0.201308 &       0.000809 &    0.008451 \\
+        \bottomrule
+        \end{tabular}
+    \caption{Algunos de los atributos extraídos por cada uno de los modelos de \emph{deep learning} para cada una de las muestras del dataset CASIA v1.}
+    \label{tab:my_label}
+\end{table}
+\clearpage
+
+Los atributos extraídos se corresponden con las columnas \emph{VGG16\_0}, \emph{InceptionV3\_0}, \emph{ResNet50\_0}, cabe recalcar que estos no son todos los atributos extraídos ya que dependiendo del modelo elegido para la extracción tendremos tantas columnas como \emph{outputs} tenga el modelo en su útima capa \emph{Fully Connected}.
 
 
 
+\section{Clasificación}
 
+Se ha decantado por el uso de estos algoritmos, ya que son más fáciles de comprender que las matemáticas detrás de los métodos tradicionales.
+
+Se usarán los algoritmos de clasificación de la biblioteca de \emph{Scikit Learn} ~\cite{scikit:learn}.
+
+\begin{table}[h]
+    \centering
+        \begin{tabular}{lllll}
+        \toprule
+        {} &       SVM & Nearest Neighbors & LogisticRegression & Random Forest \\
+        \midrule
+        VGG16       &  0.890212 &          0.738095 &           0.904762 &      0.744709 \\
+        InceptionV3 &  0.887566 &          0.734127 &           0.912698 &      0.805556 \\
+        ResNet50    &  0.853175 &          0.710317 &           0.892857 &      0.617725 \\
+        \bottomrule
+        \end{tabular}
+    \caption{Tasas de acierto}
+    \label{tab:my_label}
+\end{table}
+
+
+En la tabla anterior se observa que el modelo y el algoritmo que arrojan la mayor precisión, es el \emph{InceptionV3} y el \emph{Logistic Regression}.
+
+Por lo que se usará esa tupla para el \emph{matching}, extraeremos los atributos con \emph{InceptionV3} y clasificaremos el sujeto con el algoritmo de \emph{Logistic Regression} al que entrenaremos con los features extraídos por el modelo de \emph{deep learning}.
+
+El entrenamiento del clasificador se realiza satisfactoriamente y alcanza una precisión siempre por encima del 90\%, por lo que cuando se le pide clasificar (identificar) un sujeto del dataset, lo hace perfectamente.
+
+\begin{table}[]
+    \centering
+    \begin{tabular}{lr}
+        \toprule
+          Sujetos &  Probabilidad (\%) \\
+        \midrule
+            Aidan &          0.000093 \\
+          Lindsay &          0.000126 \\
+           Mushka &          0.000184 \\
+           Rafael &          0.000140 \\
+         Scarlett &          0.998954 \\
+        \bottomrule
+    \end{tabular}
+    \caption{5 individuos más probables}
+    \label{tab:my_label}
+\end{table}
+
+\imagen{top_5}{Clasificación top 5}
