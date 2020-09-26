@@ -2,4 +2,119 @@
 
 \section{¿Por qué CASIA?}
 
-A la hora de elegir el dataset con el que se llevaría a cabo los experimentos del proyecto se investigó sobre los existentes
+Si buscamos una base de datos de iris, encontraremos 2 que son las más populares, estas son, CASIA Iris Database ~\cite{casia:1} y UBIRIS Database ~\cite{ubiris:1}.
+
+Ambas bases de datos ofrecen imágenes aisladas del iris con las que se podía experinmentar pero podría decirse que las muestras de UBIRIS eran más complejas de tratar, ya que incluía imágenes desenfocadas, con mucho ruido, y algunas en las que incluso se perdía la región que nos interasaba debido a por ejemplo, muestras con ojos cerrados.
+\imagen{ubiris}{Muestras del dataset UBIRIS.v1}
+
+En cambio las muestras de CASIA eran uniformes y ya venían preparadas para poder empezar a trabajar con ellas, esto hacía que la etapa de preprocesamiento \ref{prepro} fuese menos tediosa. 
+
+Para la descarga del dataset de CASIA, era necesario un registro previo en la página web del CSBR(\emph{Center for Biometrics and Security Research}) así cómo una confirmación por parte de éstos.
+En cambio para la descarga del de UBIRIS, no se necesitaba nada, sólo accedías y descargabas.
+
+Necesité de 2 intentos para poder registrarme, ya que la primera vez lo intenté con el correo de la universidad pensando que con ello tendría más posibilidades pero nunca me confirmaron, en el segundo intento probé con un correo ordinario de \emph{Gmail} y tuve éxito.
+
+Así que podría decirse que el motivo principal fue la comodidad y también el hecho de que la mayoría de los \emph{papers} en los que me he basado usaban esta base de datos.
+
+\section{Segmentación manual vs automática}
+
+En un principio, para la etapa de segmentación \ref{segmentacion}, no se planeó usar un modelo de \emph{deep learning} pero cómo se explicó en dicho apartado, se tuvo muchas dificultades para encontrar parámetros que permitieran la localización de los bordes límbico y pupilar para todas las muestras del dataset.
+
+El método tradicional consistía en encontrar un umbral (\emph{thresholding} global que permitiera binarizar la muestra lo suficientemente bien cómo para que el detector de bordes de Canny hiciera su trabajo, localizando las 2 circunferencias que nos interesaban, pero cómo no fue posible, el proyecto tomó la dirección de usar \emph{deep learning} desde etapas tempranas.
+
+Tras la descarga del modelo del repositorio, el proceso para poder usarla fueron los siguientes:
+\begin{itemize}
+    \item Se cargaba el modelo con \texttt{load\_model} de \emph{Keras}
+    \imagen{load-model}{Cargar modelo preentrenado.}
+    \item Las muestras originales de CASIA eran de dimensión 320x280, por lo que para pasárselas al método \texttt{predict()} del modelo era necesario redimensionar a un \emph{shape} cuadrado, es decir, misma altura y anchura.
+    No se le pasaron todas las muestras a la vez sino que se implentó una función generador \texttt{test\_generator()}.
+    \imagen{test-generator}{Función generadora}
+\end{itemize}
+
+Una vez se tenía el \emph{output} de la red, se volvía a redimensionar a 320x280, pero aunque la segmentación era correcta, las muestras aparecían pixeladas, de modo que se temía que el detector de Canny tuviese problemas para tratar las muestras en ese estado.
+\imagen{background}{Output original (izquierda), Output redimensionado (centro). ROI superpuesto sobre muestra original (derecha)}
+
+Pero tal y cómo se observa en la figura \ref{fig:outputs-circles}, vemos que ese problema era infundado, de todos modos se quiso eliminar riesgos y se aplicó un filtro \emph{Gaussiano} con el objetivo de suavizar los bordes de las muestras, y después se binarizó nuevamente.
+
+Aunque en \ref{segmentacion} no se especifica, fue éste el método que se siguió como paso previo a la localización de las coordenadas del iris y se aplicó a todas las muestras:
+\begin{itemize}
+    \item \texttt{cv2.GaussianBlur(img,(17,17),0)}, éste método difuminaba la muestra, la clave a la hora de usar dicho método era fijar un \emph{kernel} apropiado (positivo e impar), es decir, cuanto mayor era el valor que se le asignaba, más difuminaba la muestra.
+    \item \texttt{cv2.threshold(blur, 70, 255, cv2.THRESH\_BINARY)}, en este método era primordial fijar un umbral apropiado, se optó por 70, básicamente lo que hace el método, es que a cualquier pixel con intensidad < 70, lo fija a blanco y al resto, > 70, a negro, es así como se lleva a cabo el proceso de binarización.
+\end{itemize}
+
+\imagen{gaussian}{\emph{Output} de la red redimensionado (izquierda). Filtro Gaussiano (centro). Segmentación final (derecha).}
+
+\imagen{canny-edges}{Coordenadas localizadas sobre los bordes detectados o \emph{edge map}.}
+
+Se optó por este proceso previo en lugar de aplicar Canny directamente sobre los \emph{outputs} redimensionados, porque la región sobre la que se debe aplicar Canny queda más clara ya que nos libramos de estorbos como pueden ser las pestañas.
+\imagen{comparison}{Detección de bordes sin filtro Gaussiano (izquierda) y con filtro (derecha) sobre la muestra \emph{008\_1\_1.bmp} }
+
+\section{\emph{Deep Learning} para la extracción de atributos}
+
+Un modelo preentrenado ~\cite{chollet:2017} no es más que una red neuronal que previamente ha sido entrenada con un dataset enorme y general, esto hace que los patrones aprendidos por la red pueden hacer que actúe como un modelo genérico capaz de resolver cualquier problema.
+Esta portabilidad es lo que hace tan poderoso al \emph{deep learning}
+
+Una \emph{CNN} se compone de 2 partes: la base convulocional y el clasificador. El proceso consistirá en usar la base conculocional para la extracción de los atributos ya que es la parte de la red más general y por tanto reusable, y entrenar un nuevo clasificador con dichos atributos.
+\imagen{conv-base1}{Arquitectura de un modelo basado en una Red Neuronal Convulocional ~\cite{marcelino:2018}}
+Usaremos el modelo VGG16 ~\cite{simonyan:2014} el cual se importa desde \emph{Keras}, y ha sido entrenado sobre el dataset de \emph{Imagenet}.
+
+
+\imagen{conv-base}{Intanciación del modelo VGG16}
+Los parámetros son:
+\begin{itemize}
+    \item \texttt{weights}: para que cargue los patrones aprendidos al entrenarse con \emph{Imagenet}.
+    \item\texttt{include\_top}: booleano que indica si incluímos las últimas capas \emph{Fully Connected}, en nuestro caso no las incluímos ya que esas capas se corresponderían con las 1000 clases de \emph{Iamgenet} pero para nuestro proyecto se necesitarán únicamente 108.
+    \item\texttt{input\_shape}: dimensiones de los tensores que se le pasarán a la red
+\end{itemize}
+
+Con la ayuda del módulo \texttt{splitfolders} creamos las estructuras de los directorios de entrenamiento y testeo.
+
+\imagen{extract-features}{Método para extraer los atributos con la base convulocional.}
+En la línea 9 se especifica el \emph{output shape} de la última capa de la base convulocional, y en la 10, las muestras que nos interesa, que serán 108 individuos.
+En la línea 11 creamos un generador y con \texttt{.flow\_from\_directory()} las generamos desde los directorios creados anteriormente, importante especificar \texttt{class\_mode='categorical'} ya que se trata de un problema de clasificación multiclase. Por último en la línea 20 usamos el método \texttt{.predict()} de la base convulocional para extraer los atributos.
+
+Ahora se creará el nuevo clasificador, se compilará y se entrenará.
+\imagen{clasific}{Creación y compilación del nuevo clasificador adecuado para los 108 individuos.}
+
+\imagen{history}{Entrenamiento del clasificador.}
+\imagen{train}{últimas 5 epochs del entrenamiento.}
+
+Tal y cómo se observa se alcanza un acierto del 65\% por lo que se decide aumentar dicho porcentaje cambiando nuevamente de enfoque.
+
+Ahora se usarán 3 modelos  para la extracción de atributos, que serán: \emph{VGG16}, \emph{InceptionV3} y \emph{ResNet50} y se usarán clasificadores de \emph{Sckikit Learn}.
+
+Todo este proceso viene redactado en el notebook \emph{\#8 Feature extaction-v2.ipynb}
+
+\imagen{vgg16}{Ejemplo de carga de uno de los 3 modelos, para los 2 restantes el proceso es igual, se cargan y se almacenan en un diccionario de modelos (\texttt{models\_dict())}}
+
+Para la extracción de atributos se usará el fichero \emph{iris\_data.csv} generado en el notebook \emph{\#6 Funciones-v2.ipynb} en el que se guardan las coordenadas de los bordes límbico y pupilar y las muestras ya polarizadas que estaran guardass en el directorio \emph{CASIA-Polar}. Ver \ref{tab:coords}.
+
+Destacan 3 funciones:
+\begin{itemize}
+    \item \texttt{extract\_features(image\_path,model\_name)}: es la función encargada de extraer los atributos de la muestra polarizada, se le pasa la ruta de la muestra y el modelo que se desea usar para la extracción.
+    \item\texttt{register\_to\_deepfeatures(register)}. guarda los atributos extraídos de las muestras polarizadas en filas de un \emph{DataFrame}.
+    \item\texttt{DataFrame.apply()}: aplica la función \texttt{extract\_features()} a todas las filas del fichero \emph{iris\_data.csv}, parecido a \texttt{map()}.
+\end{itemize}
+
+Una vez realizado lo anterior tendremos como resultado el fichero \emph{iris\_features.csv} \ref{tab:features} y se pasará a elegir los clasificadores de Scikit Learn.
+ Se eligieron 4:
+ \begin{itemize}
+     \item Support Vector Machine (SVM)
+     \item Logistic Regression
+     \item Nearest Neighbours
+     \item Random Forest
+ \end{itemize}
+ 
+Como en un mismo fichero tenemos todos los fetures extraídos por los 3 modelos, se procederá a crear 3 ficheros independientes que guardasen los features de cada modelo. Con esto se consigue \emph{X} e \emph{y}.
+
+ 
+ Se creará una función \texttt{cross\_validate\_preds\_model(X, y, model, num\_folds)}: para evaluar los clasificadores con evaluación cruzada. Lo único destacable de esta parte es el \emph{num\_folds} que se le ha fijado a 4 por ser divisor de 756. Definir ese número de \emph{folds} permitirá al modelo entrenarse en 4 versiones (de 189 muestras cada una) del set de entrenamiento y evaluarse en 4 versiones del set de testeo.
+ 
+ El resultado es el visto en la tabla \ref{tab:accuracy}.
+ 
+ Por lo que se llega a la conclusión de que el mejor modelo de \emph{deep learning} y el mejor clasificador para esta tarea en específico son: \emph{InceptionV3} y \emph{Logistic Regression}.
+ 
+ A la hora de usar el método \texttt{predict()} del clasificador observamos que efectivamente funciona e identifica a los sujetos perfectamente.
+ Su rendimiento es muy bueno, ya que incluso cuando hacemos una clasificación \emph{top-5} con \texttt{predict\_proba()}, vemos la probabilidad con la que identifica al sujeto correcto respecto a los otros 4 más probables \ref{fig:top_5}.
+ 
+ El clasificador se serializa (\emph{logistic\_clf\_trained.pkl}) y se guarda para usarlo en la aplicación de escritorio.

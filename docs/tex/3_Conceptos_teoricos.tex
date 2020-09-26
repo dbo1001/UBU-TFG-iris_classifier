@@ -93,14 +93,14 @@ Con el objetivo de facilitar la detección de los bordes del iris, las muestras 
 Cabe recalcar que dichas ediciones son mínimas y se aplican únicamente en la pupila ~\cite{kumar:2019}, la cual no proporciona ninguna información útil para las etapas posteriores de extracción y clasificación de los patrones del iris ~\cite{bowyer:2008}.
 \imagen{specular}{Imagen S1143R01.jpg perteneciente CASIA-Interval-V3 con regiones especulares(izquierda). Imagen 001\_1\_1.bmp de CASIA-Iris-V1 sin regiones especulares(derecha)}
 
-\section{Preprocesamiento}
+\section{Preprocesamiento} \label{prepro}
 Como puede apreciarse en la figura de la derecha de la imagen ~\ref{fig:specular}, la muestra es del ojo completo, pero para el reconocimiento únicamnete nos interesa la región del iris, por lo que elementos como pestañas, párpados, esclera \emph{etc} han de eliminarse ya que no aportan nada.
 Así mismo dependiendo de las condiciones en las que se tomaron las muestras es posible que el tamaño de los iris varíen debido a la dilatación o la contracción de la pupila.
 
 Es por ellos que ha de procesarse la imagen para localizar y aislar el iris (\emph{segmentar}) y ajustarlo a un tamaño estándar (\emph{normalizar})
 
 
-\subsection{Segmentación}
+\subsection{Segmentación} \label{segmentacion}
 En esta etapa se requiere detectar de manera automática los bordes \emph{límbico} y \emph{pupilar} del ojo aislando la región del iris y excluyendo el resto de la imagen, es decir, se busca el \emph{ROI (Region of interest)}
 
 El iris se corresponde con la región circular comprendido entre la pupila y la esclera.
@@ -188,7 +188,7 @@ El hecho de usar el modelo previamente entrenado aceleró mucho el proceso ya qu
 
 El modelo preentrenado segmenta bien los iris, pero como las dimensiones no se correspondían con las de las muestras orginales se las volvió a redimensionar a 320x280 para ya posteriormente aplicar el detector de bordes de Canny.
 
-\imagen{outputs-circles}{Bordes detectados(\emph{edge map} con Canny (arriba). Coordenadas de los bordes límbico y pupilar dibujadas sobre el \emph{edge map} }
+\imagen{outputs-circles}{Bordes detectados o \emph{edge map} con Canny (arriba). Coordenadas de los bordes límbico y pupilar dibujadas sobre el \emph{edge map} (abajo) }
 Ahora solo queda dibujar las mismas coordenadas encontradas en las muestras para hacernos una idea de la región con la que trabajaremos en la posterior etapa de normalización.
 
 \imagen{coords}{Detectados bordes límbico y pupilar.}
@@ -215,7 +215,7 @@ Llegados a este punto se decidió cambiar los nombres a las muestras para que el
         \bottomrule
         \end{tabular}
     \caption{Centros y radios aproximados para cada una de las muestras del dataset CASIA v1.}
-    \label{tab:my_label}
+    \label{tab:coords}
 \end{table}
 
 
@@ -255,7 +255,7 @@ Los modelos se tomarán de la biblioteca de \emph{deep learning} \emph{Keras} ~\
         \bottomrule
         \end{tabular}
     \caption{Algunos de los atributos extraídos por cada uno de los modelos de \emph{deep learning} para cada una de las muestras del dataset CASIA v1.}
-    \label{tab:my_label}
+    \label{tab:features}
 \end{table}
 \clearpage
 
@@ -281,7 +281,7 @@ Se usarán los algoritmos de clasificación de la biblioteca de \emph{Scikit Lea
         \bottomrule
         \end{tabular}
     \caption{Tasas de acierto}
-    \label{tab:my_label}
+    \label{tab:accuracy}
 \end{table}
 
 
