@@ -25,63 +25,116 @@ from skimage.draw import circle_perimeter
 from skimage.color import gray2rgb
 from matplotlib import cm
 from time import time
-
-
+from classification import Classifier
 # sign_image = Label(ventana)
 # segm = Label(ventana)
 
 class Preprocess:
-    def __init__(self,ventana):
+    def __init__(self,ventana, clf):
         self.ventana=ventana
-        self.sign_image = Label(self.ventana)
-        self.segmented = Label(self.ventana)
-        self.cargar_muestra = Button(self.ventana, text="Cargar muestra",command=self.upload_image)
-        self.cargar_muestra.pack(side=BOTTOM, expand=True)
-        self.sign_image.pack(side=BOTTOM,expand=True)
-        self.segmented.pack(side=TOP,expand=True)
-        self.segmented_sample_path = os.path.join(os.getcwd(),"output.png")
-        self.canny_sample_path = os.path.join(os.getcwd(),"output-canny.png")
+        self.clf = clf
+        self.ventana.resizable(0,0)
+        self.top = Frame(self.ventana)
+        self.top.config(
+            bd = 15
+        )
+        self.top.pack(side="top")
+        self.center = Frame(self.ventana)
+        self.center.pack(side="top")
+
+        self.resultado = Frame(self.ventana) # para mostrar si acceso autorizado
+        self.resultado.pack(side="top")
+        # Label(self.resultado, text="USUARIO AUTORIZADO").pack()
+        self.resultado.config(
+            bd = 15
+        )
+
+        self.bottom = Frame(self.ventana) # botones de segmentación, coordeandas y normalización
+        self.bottom.pack(side="top")
+
+
+        self.sign_image = Label(self.top)
+        self.cargar_muestra = Button(self.ventana, text="Cargar muestra",command=self.upload_image,width=15, height=1)
+        self.cargar_muestra.config(
+            bg='white',
+            font=('arial',10)
+        )
+        self.cargar_muestra.pack(in_=self.center, side="left")
+        # self.sign_image.pack(side=BOTTOM,expand=True)
         self.boundaries,self.centers = [],[]
         self.cx, self.cy, self.radius=(),(),()
+
+        # nombre de las muestras
+        self.segmented_sample_path = os.path.join(os.getcwd(),"output.png")
+        self.canny_sample_path = os.path.join(os.getcwd(),"output-canny.png")
+        self.coords_sample_path = os.path.join(os.getcwd(),"coords.png")
+        self.norm_sample_path = os.path.join(os.getcwd(),"normalized.png")
+        self.enh_sample_path = os.path.join(os.getcwd(),"enhanced.png")
                 
     def upload_image(self):
         try:
             original_sample_path=filedialog.askopenfilename()
             uploaded=Image.open(original_sample_path)
-            uploaded.thumbnail(((self.ventana.winfo_width()/2.25),(self.ventana.winfo_height()/2.25)))
             im=ImageTk.PhotoImage(uploaded)
+
             self.sign_image.configure(image=im)
             self.sign_image.image=im
+            self.sign_image.pack(side = "top", fill = "both", expand = "yes")
 
             # label.configure(text='')
-            self.show_segment_button(original_sample_path)
+            self.show_clf_button(original_sample_path)
         except:
             pass
+    
+    def get_sujeto(self):
+        features = self.clf.extract_features(self.enh_sample_path)
+        sujeto = self.clf.predecir(features)
+        return sujeto[0]
 
-    def show_segment_button(self,original_sample_path):
+    def show_clf_button(self, original_sample_path):
+        clf_button=Button(self.ventana,text="Log in", command=lambda: self.segmentar(original_sample_path),width=15, height=1)
+        clf_button.configure(background='#364156',
+                            foreground='white',
+                            font=('arial',10))
+        clf_button.pack(in_=self.center, side="right")
+
+    def show_segment_button(self):
         # segmentación
-        segment_button=Button(self.ventana,text="Iris Segmentation", command=lambda: self.segmentar(original_sample_path),padx=10,pady=5)
+        segment_button=Button(self.ventana,text="Segmentación", command=lambda: self.print_button("Segmentación",self.segmented_sample_path),width=15, height=1)
         segment_button.configure(background='#364156',
                             foreground='white',
-                            font=('arial',10,'bold'))
-        segment_button.place(relx=0.79,rely=0.40)
+                            font=('arial',10))
+        segment_button.pack(in_=self.bottom,side="left")
 
-    def show_coords_button(self,original_sample_path):
+    def show_coords_button(self):
         #coords button
-        coords_button=Button(self.ventana,text="Iris Coordinates", command=lambda: self.get_coords(original_sample_path),padx=10,pady=5)
+        coords_button=Button(self.ventana,text="Iris Coordinates", command=lambda: self.print_button("Coordinates", self.coords_sample_path),width=15, height=1)
         coords_button.configure(background='#364156',
                             foreground='white',
-                            font=('arial',10,'bold'))
-        coords_button.place(relx=0.79,rely=0.50)
-    
+                            font=('arial',10))
+        coords_button.pack(in_=self.bottom,side="left")
+
     def show_norm_button(self):
-        #normalization button
-        norm_button=Button(self.ventana,text="Iris Normalization", command=self.iris_normalization,padx=10,pady=5)
+        #coords button
+        norm_button=Button(self.ventana,text="Normalization", command=lambda: self.print_button("Normalización", self.norm_sample_path),width=15, height=1)
         norm_button.configure(background='#364156',
                             foreground='white',
-                            font=('arial',10,'bold'))
-        norm_button.place(relx=0.79,rely=0.60)
-        
+                            font=('arial',10))
+        norm_button.pack(in_=self.bottom,side="left")
+    
+    def print_button(self, name, path):
+        global im
+        top = Toplevel(self.ventana)
+        top.title(name)
+        im=ImageTk.PhotoImage(Image.open(path))
+        panel = Label(top, image=im)
+        panel.image = im
+        panel.pack()
+        # top.transient(self.ventana)
+        top.focus_set()
+        top.grab_set()
+        # self.ventana.wait_window(top)
+
     ############### NORMALIZATION ###########################
     def crop_and_ecualization(self,normalized):
         img = normalized
@@ -92,8 +145,6 @@ class Preprocess:
 
     def iris_normalization(self):
         global img_norm, img_enh
-        top = Toplevel()
-        top.title("Normalization")
         normalized = []
         cent=0
         for img in self.boundaries:
@@ -125,12 +176,14 @@ class Preprocess:
             res = cv2.resize(polar,(512,64))
             normalized.append(res)
             cent+=1
-        io.imsave("normalized.png",normalized[0])
-        io.imsave("normalized-enhanced.png",self.crop_and_ecualization(normalized[0]))
-        img_norm=ImageTk.PhotoImage(Image.open("normalized.png"))
-        Label(top, image=img_norm).pack()
-        img_enh=ImageTk.PhotoImage(Image.open("normalized-enhanced.png"))
-        Label(top, image=img_enh).pack()
+        io.imsave(self.norm_sample_path,normalized[0])
+        io.imsave(self.enh_sample_path,self.crop_and_ecualization(normalized[0]))
+
+        self.show_segment_button()
+        self.show_coords_button()
+        self.show_norm_button()
+        sujeto = self.get_sujeto()
+        Label(self.resultado, text="Sujeto identificado: "+sujeto).pack()
 
     ###############LOCATE COORDS########################
     def draw_circles(self,img, cx, cy, radii):
@@ -158,9 +211,9 @@ class Preprocess:
         return [cx[0], cy[0], radii[0]]
 
     def get_coords(self, original_sample_path):
-        global img_coord
-        top = Toplevel()
-        top.title("Coordinates")
+        # global img_coord
+        # top = Toplevel()
+        # top.title("Coordinates")
         
         pupil_coord = self.get_circles("pupil",original_sample_path)
         iris_coord = self.get_circles("iris",original_sample_path)
@@ -171,12 +224,12 @@ class Preprocess:
         draw = self.draw_circles(cv2.imread(original_sample_path, 0),self.cx,self.cy,self.radius)
         self.boundaries.append(draw)
         self.centers.append(pupil_coord)
-        io.imsave("coords.png",draw)
-        img_coord=ImageTk.PhotoImage(Image.open("coords.png"))
-        Label(top, image=img_coord).pack()
-        Label(top,text=texto_pupila).pack()
-        Label(top,text=texto_iris).pack()
-        self.show_norm_button()
+        io.imsave(self.coords_sample_path,draw)
+        # img_coord=ImageTk.PhotoImage(Image.open("coords.png"))
+        # Label(top, image=img_coord).pack()
+        # Label(top,text=texto_pupila).pack()
+        # Label(top,text=texto_iris).pack()
+        self.iris_normalization()
 
     ###### SEGMENTATION ######################
 
@@ -195,9 +248,9 @@ class Preprocess:
         return binarized
 
     def segmentar(self,original_sample_path):
-        global im
-        top = Toplevel()
-        top.title("U-net Output")
+        # global im
+        # top = Toplevel()
+        # top.title("U-net Output")
         model = load_model('Iris_unet_d5.h5')
         # predecimos(segementamos) la muestra
         result = model.predict(self.ajustar_input(original_sample_path))
@@ -206,10 +259,10 @@ class Preprocess:
         io.imsave(self.segmented_sample_path,segmented)
         cannied = cv2.Canny(segmented,10,255)# cambiar nombre variable
         io.imsave(self.canny_sample_path,cannied)
-        im=ImageTk.PhotoImage(Image.open(self.segmented_sample_path))
-        Label(top, image=im).pack()
+        # im=ImageTk.PhotoImage(Image.open(self.segmented_sample_path))
+        # Label(top, image=im).pack()
 
-        self.show_coords_button(original_sample_path)
+        self.get_coords(original_sample_path)
  
 
 
@@ -217,11 +270,12 @@ class Preprocess:
 if __name__ == '__main__':
     ventana = Tk()
     ventana.geometry("500x500")
-    ventana.title("Iris Classifier")
+    # ventana.title("Iris Classifier")
     encabezado = Label(ventana, text="Iris Classifier")
-    encabezado.configure(bg='#CDCDCD',
-                        fg='#364156',
-                        font=("Arial", 20))
+    encabezado.configure(bg='#364156',
+                        fg='white',
+                        font=("Consolas", 20),
+                        padx=500)
     encabezado.pack()
-    app = Preprocess(ventana)
+    app = Preprocess(ventana, Classifier())
     ventana.mainloop()
