@@ -216,14 +216,11 @@ class Preprocess:
         """
         clasifica el iris 
         """
-        print(self.enh_sample_path)
-        # self.counter = self.counter + 1
         clasif = self.clf()
         features = clasif.extract_features(self.enh_sample_path)
         sujeto = clasif.predecir(features)
-        print(sujeto)
-        self.resultado.configure(text="Sujeto identificado: "+sujeto)
-        # self.enh_sample_path = os.path.join(os.getcwd(), "enhanced_" + str(self.counter) + ".png")
+        self.resultado.configure(text="Sujeto identificado: "+sujeto[0])
+        
         self.resultado.pack()
 
     ###############LOCATE COORDS########################
