@@ -2,12 +2,171 @@
 
 \section{Introducción}
 
-\section{Planificación temporal}
+En el siguiente apartado se detallarán las fases seguidas desde el comienzo hasta la finalización del proyecto, así mismo se realizará una estimación aproximada de de los recursos necesarios que permitirían desarrollar este proyecto en un escenario real.
 
+\section{Planificación temporal}
+La idea de este TFG fue presentada a mi tutor en el mes de febrero, pero no se empezó a trabajar en él como tal hasta el mes de junio.
+Al principio se planearon revisiones semanales en las que mediante videollamada comunicaba a mi tutor el progreso que había hecho durante esa semana, aunque posteriormente se intercalaron con reuniones bisemanales.
+Con esto se intentaba aplicar la metodología \emph{Scrum}, en el que cada \emph{sprint} era de una semana, aunque la duración de estos es algo que varió a lo largo del desarrollo del proyecto.
+
+Todas las tareas, avances y cambios del proyecto están reflejados en el siguiente repositorio: \url{https://github.com/jaa0124/iris_classifier}
+
+El proyecto constaba de 3 fases bien diferenciadas
+\begin{itemize}
+    \item \textbf{Fase 1}: Tras discutir la temática que se quería tratar, esta fase se dedicó a la investigación de las técnicas existentes y artículos relacionados.
+    \item \textbf{Fase 2}: Tras la fase 1, se llegó a la conclusión de que los conocimientos que se tenían sobre el tema eran escasos, por consiguiente esta fase se dedicó a la autoformación mediante apuntes de asignaturas de la universidad facilitados por el tutor o con cursos de plataformas didácticas como \emph{Udemy} o \emph{Coursera}.
+    \item \textbf{Fase 3}: Aplicamos los conocimientos adquiridos y se empieza con la experimentación en cuadernos de \emph{Jupyter} y posteriormente se desarrolla una aplicación de escritorio funcional que resuma y ponga a prueba las conclusiones de los cuadernos.
+
+\end{itemize}
+Cabe destacar que tanto la Fase 1 como la 2, nunca se dieron por completadas, ya que constantemente se necesitaban competencias de las que no te dabas cuenta hasta que te encontrabas con un problema que no podías resolver.
+\subsection{Sprint 1 (12/06/20 - 19/06/20)} \label{sp1}
+Marca el comienzo del proyecto, como primera tarea se me asigna buscar documentación relacionada con el reconocimiento del iris y encontrar algún método que sea aplicable a lo que se deseaba hacer, así mismo se me facilita:
+\begin{itemize}
+    \item un proyecto realizado por alumnos años antes cuya temática era similar aunque su objetivo final era distinto.
+    \item una serie de apuntes de la asignatura de \emph{Minería de datos}.
+    \item \emph{notebooks} de experimentación del propio tutor que serían de mucha utilidad pero en fases más avanzadas del proyecto, aún así, se le dedicó tiempo a su comprensión.
+\end{itemize}
+
+\subsection{Sprint 2 (19/06/20 - 26/06/20)}
+No se asignaron nuevas tareas ya que aún no se habían completado las de la semana anterior debido a la complejidad de algunas, por lo que se solicitó una prórroga de una semana para intentar completar dichas tareas.
+\subsection{Sprint 3 (26/06/20 - 03/07/20)}
+Se comienza con la experimentación en los \emph{notebooks}, se solicitaron las siguientes tareas:
+\begin{itemize}
+    \item Buscar un dataset con el que realizar los experimentos.
+    \item Una vez elegido, probar posibles métodos para la segmentación del iris.
+    \begin{itemize}
+        \item Binarizar las muestras aplicando un \emph{thresholding}.
+        \item Aplicar el detector de bordes de Canny.
+    \end{itemize}
+\end{itemize}
+\subsection{Sprint 4 (03/07/20 - 10/07/20)}
+Tras intentar segmentar el iris con las técnicas propuestas por el tutor, no se consigue el resultado esperado, por lo que se me asigna otra prórroga de una semana.
+\subsection{Sprint 5 (10/07/20 - 17/07/20)}
+Aunque la idea era presentar el TFG en la segunda convocatoria del mes de julio, se desechó la idea ya que el proyecto estaba en etapas muy tempranas de su desarrollo y se le comunicó al tutor la idea de entregarlo en septiembre y posiblemente cambiar la temática del TFG ya que se llegó a un punto en el que no había avances. El proyecto entra en un \emph{hiatus}.
+\subsection{Sprint 5 (27/07/20 - 10/08/20)}
+Se decide continuar con el proyecto, así mismo se me propone un cambio radical para conseguir segmentar el iris: usar un modelo de \emph{deep learning}.
+Tareas de este \emph{sprint}:
+\begin{itemize}
+    \item Probar la red preentrenada \emph{U-Net} para segmentar las muestras automáticamente.
+    \item Mejorar los resultados de la red aplicando operadores morfológicos que faciliten la detección de los bordes.
+    \item Empezar con el proceso de normalización.
+    \item Seleccionar clasificadores de \emph{Scikit Learn}.
+\end{itemize}
+
+\subsection{Sprint 6 (10/08/20 - 25/08/20)}
+La etapa de preprocesamiento de las muestras se había completado con éxito, por lo que ahora quedaba la última, la clasificación.
+
+Para ello se me vuelve a recomendar revisar los \emph{notebooks} del tutor mencionados anteriormente \ref{sp1} y aplicar un proceso similar al que aparece en ellos pero haciendo los cambios que pudieran ser necesarios para que funcione con el proyecto.
+
+\subsection{Sprint 7 (25/08/20 - 07/09/20)}
+Los experimentos en los \emph{notebooks} funcionan perfectamente por lo que se habla de desarrollar un aplicación de escritorio que refleje los resultados, así mismo se comienza a redactar la memoria.
+
+Tareas asignadas:
+\begin{itemize}
+    \item Investigar sobre bibiotecas de \emph{Python} para la creación de interfaces de usuario, se recomienda \emph{Kivy} y \emph{TkInter}.
+    \item Empezar a redactar la memoria y enviársela al tutor.
+\end{itemize}
+
+\subsection{Sprint 8 (07/09/20 - 21/09/20)}
+Se tiene preparada una versión de la aplicación y se la muestra al tutor, este \emph{sprint} se dedica a ultimar detalles de funcionalidad de la aplicación y a la finalización de la memoria.
+
+\subsection{Sprint 8 (21/09/20 - 28/09/20)}
+Tareas:
+\begin{itemize}
+    \item Organizar el repositorio.
+    \item Entregar TFG.
+\end{itemize}
+
+Con el \emph{sprint 8} damos por concluído el proyecto. Una aclaración importante: estos \emph{sprints} no quedan reflejados como tal en el repositorio porque en un principio se empezó con uno que sí estaba organizado de este modo, pero tras el \emph{hiatus} mencionado se eliminó dicho repositorio y se empezó uno nuevo.
 \section{Estudio de viabilidad}
 
 \subsection{Viabilidad económica}
 
+\subsubsection{Costes}
+\subsubsection{Coste Software}
+Los recursos usados en el proyecto son \emph{open source} y están disponibles de manera gratuita al público, por lo que cualquiera podría acceder a estos.
+
+Concluimos que en este apartado no se tiene coste alguno.
+\subsubsection{Coste Hardware}
+El hardware empleado ha sido un ordenador portátil que se compró específicamente para cursar el grado, valorado en 1200\euro, teniendo en cuenta que un alumno promedio tarda 5 años en finalizar la carrera, definiremos este número como el tiempo de amortización:
+\begin{equation}
+\frac{1200}{12 * 5} * 5 = 100  \text{\euro}
+\end{equation}
+
+\subsubsection{Coste de formación}
+Se necesitaban unos conocimientos con los que no se contaba para realizar el proyecto , la carrera ofrecía 3 asignaturas que hubiesen sido de utilidad, pero de las que sólo me matriculé en una por ser la obligatoria. Estas asignaturas eran:
+\begin{itemize}
+    \item Sistemas inteligentes
+    \item Computación neuronal y evolutiva
+    \item Minería de datos
+\end{itemize}
+La asignatura constaba de 6 créditos a 20\text{\euro}  cada uno, por lo que de haber optado por matricularme en esas asignaturas optativas, el gasto hubiese sido de 240\euro.
+
+Sin embargo debido a que matricularse en más asignaturas supondría una carga y pondrían en riesgo aquellas en las que ya se estaba matriculado, se optó por usar cursos de plataformas didácticas, se usaron 2:
+\begin{itemize}
+    \item \textbf{Coursera}:
+    \begin{itemize}
+        \item \emph{Neural Networks and Deep Learning: }\url{https://www.coursera.org/learn/neural-networks-deep-learning/home/welcome}
+        \item \emph{Convulotional Neural Networks: } \url{https://www.coursera.org/learn/convolutional-neural-networks/home/welcome}
+    \end{itemize}
+    La suscripción en esta plataforma es mensual, de modo que de estar suscritos el gasto sería de 41\text{\euro} mensuales, pero en este caso se aprovechó la suscripción gratuita que ofrece Coursera a entidades universitarias debido a las pandemia.
+    Así que el gasto sería 0\euro.
+    \item\textbf{Udemy}
+    \begin{itemize}
+        \item \emph{Complete Machine Learning and Data Science: Zero to Mastery: }\url{https://www.udemy.com/course/complete-machine-learning-and-data-science-zero-to-mastery/}
+    \end{itemize}
+    Para este curso de desembolsó una cantidad de 11,99\euro.
+\end{itemize}
+    
+Por lo que el gasto para la formación se queda en 11,99\euro.
+
+\subsubsection{Coste de personal}
+
+Se considera que el proyecto ha sido desarrollado por un investigador de la universidad, que perfectamente se podría completar en unos 4 meses, de modo que:
+\begin{table}[H]
+	\begin{center}
+		\begin{tabular}{ll}
+			\hline
+			Concepto                        & Coste (\euro) \\ \hline
+			Salario bruto del trabajador    & 1300      \\
+			Contingencias comunes (23,6 \%) & 306,8     \\
+			Desempleo (5,5 \%)              & 71,5        \\
+			FOGASA (0,2 \%)                 & 2,6       \\\hline
+			Coste total mensual             & 1680,9  
+		\end{tabular}
+	\end{center}
+\end{table}
+
+Y teniendo en cuenta que tardará 4 meses en finalizar el proyecto, los gastos ascenderían a 6723,6\euro.
+\subsubsection{Ingresos/beneficios}
+Se trata de un proyecto de investigación que será publicado de manera gratuita, por lo que en ese aspecto no se espera ningún beneficio económico, en cuanto a los ingresos, podría recibirse alguna financiación o beca.
 \subsection{Viabilidad legal}
+Tanto los \emph{papers} en los que se ha basado el proyecto como las herramientas usadas (detalladas en \ref{tabla:license}) son de dominio público y son fácilmente accesibles.
+\begin{table}[h]
+	\centering
+	\label{tabla:license}
+	\rowcolors {2}{gray!35}{}
+	\begin{tabular}{l l l l}
+		\toprule
+		Librería     & Versión & Descripción                                                     & Licencia                \\ 	\midrule	
+		TensorFlow      & 2.3.1     &  \begin{tabular}[c]{@{}l@{}}Biblioteca para \emph{Machine Learning}. \end{tabular}               & Apache    \\
+		Keras     & 2.4.3     &  \begin{tabular}[c]{@{}l@{}}Biblioteca para \emph{Deep Learning}. \end{tabular}               & MIT    \\
+		OpenCV      & 4.4.0.44     &  \begin{tabular}[c]{@{}l@{}}Biblioteca de visión por computador. \end{tabular}               & BSD    \\
+		Scikit-Learn & 0.22.1  & \begin{tabular}[c]{@{}l@{}}Biblioteca para aprendizaje\\ automático en Python.\end{tabular}	               & BSD                     \\
+		VsCode        & 1.46.1  & \begin{tabular}[c]{@{}l@{}}Editor de código.\\  \end{tabular} & MIT\\ 
+		Matplotlib & 	3.3.2 & \begin{tabular}[c]{@{}l@{}}Biblioteca para generar gráficos.\\  \end{tabular} & BSD\\
+		Numpy & 	1.18.5 & \begin{tabular}[c]{@{}l@{}}Biblioteca para cálculo numérico.\\  \end{tabular} & BSD\\
+		Pandas & 	1.1.2 & \begin{tabular}[c]{@{}l@{}}Biblioteca para análisis de datos.\\  \end{tabular} & Libre\\
+		Jupyter Lab & 	2.2.8 & \begin{tabular}[c]{@{}l@{}}Entorno web de programación.\\  \end{tabular} & BSD\\
+		Jupyter Notebook & 	6.0.3 & \begin{tabular}[c]{@{}l@{}}Aplicación web para \emph{data science}\\  \end{tabular} & BSD\\
+		TkInter & 	1.1.2 & \begin{tabular}[c]{@{}l@{}}Biblioteca para GUI.\\  \end{tabular} & Libre\\\bottomrule
+		
+	\end{tabular}
+	\caption{Licencias de bibliotecas.}
+\end{table}
+
+Así mismo, la base de datos usada tiene fines educativos o de investigación, por lo que se podrá acceder a ella mediante previo registro, pero se prohíbe una distribución alterada de dicha base datos y su uso en la que no se referencia al CASIA 
+(\emph{Chinese Academy of Sciences' Institute of Automation}) y a \url{http://biometrics.idealtest.org/}
+
 
 

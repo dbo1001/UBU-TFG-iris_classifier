@@ -1,11 +1,133 @@
 \apendice{Especificación de Requisitos}
 
 \section{Introducción}
-
+Se procederá a definir los requisitos y objetivos que el proyecto deberá cumplir si se quiere que sea considerado como exitoso.
 \section{Objetivos generales}
+Se desea crear un sistema de reconocimiento que use el iris como rasgo biométrico así como desarrollar una aplicación de juguete que ejemplifique su uso en un escenario real.
+\section{Catálogo de requisitos}
+\subsection{Requisitos funcionales}
+La aplicación deberá:
+\begin{itemize}
+    \item \textbf{RF-1:} ser capaz de clasificar (identificar) las muestras de ojos.
+    \item \textbf{RF-2:} permitir al usuario ver las etapas por las que ha pasado la muestra antes de ser clasificada.
+        \begin{itemize}
+        \item \textbf{RF-2.1:} permitir ver la muestra segmentada.
+        \item \textbf{RF-2.2:} permitir ver las coordenadas del borde límbico y pupilar.
+        \item \textbf{RF-2.3:} permitir ver la muestra normalizada.
+    \end{itemize}
 
-\section{Catalogo de requisitos}
-
+    \item \textbf{RF-3:} Permitir al usuario elegir la muestra.
+    \begin{itemize}
+        \item \textbf{RF-3.1:} Debe permitir al usuario navegar en su sistema de ficheros.
+        \item \textbf{RF-3.2:} El usuario podrá cargar las muestras que el desee sin necesidad de reiniciar la aplicación.
+    \end{itemize}
+\end{itemize}
+\subsection{Requisitos no funcionales}
+La aplicación deberá:
+\begin{itemize}
+    \item \textbf{RNF-1:} realizar la clasificación en un lapso de tiempo pequeño (buenos tiempos de respuesta).
+    \item \textbf{RNF-2:} ser intuitiva y fácil de usar.
+\end{itemize}
 \section{Especificación de requisitos}
+\subsection{Diagrama de casos de uso}
+\imagen{uso}{Diagrama de casos de uso}
 
+\tablaSmallSinColores{Caso de uso 1: Cargar muestra}{p{3cm} p{.75cm} p{9cm}}{tablaCUX}{
+	\multicolumn{3}{p{10.25cm}}{CU-1: Cargar muestra} \\
+}
+{
+	Descripción                            & \multicolumn{2}{p{10.25cm}}{Permite al usuario cargar la imagen que quiera de su sistema de archivos.} \\\cline{1-3}
+	\multirow{0}{3.5cm}{Pre-condiciones} &\multicolumn{2}{p{10.25cm}}{La imagen corresponde a una muestra del dataset CASIA V1} \\\cline{2-3}
+	&\multicolumn{2}{p{10.25cm}}{La muestra está guardado en el computador del usuario.} \\\cline{1-3}
+	Requisitos                         	   & \multicolumn{2}{p{10.25cm}}{RF-3, RF-3.1, RF-3.2} \\\cline{1-3}
+	\multirow{0}{3.5cm}{Secuencia normal}  & Paso & Acción \\\cline{2-3}
+	& 1    & El usuario abre la aplicación. \\\cline{2-3}
+	& 2    & El usuario selecciona <<Cargar muestra>>.  \\\cline{2-3}
+	& 3	   & El usuario elige la muestra que quiera. 
+                                         \\\hline
+  Postcondiciones                        & \multicolumn{2}{p{10.25cm}}{La imagen aparece en la aplicación.} \\\hline
+	Excepciones & 1 & La muestra no pertence al dataset CASIA V1. \\\cline{1-3}
+	Frecuencia                             & Alta \\\cline{1-3}
+	Importancia                            & Alta \\
+}
 
+\tablaSmallSinColores{Caso de uso 2: Clasificar}{p{3cm} p{.75cm} p{9cm}}{tablaCUX}{
+	\multicolumn{3}{p{10.25cm}}{CU-2: Clasificar} \\
+}
+{
+	Descripción                            & \multicolumn{2}{p{10.25cm}}{Permite al usuario clasificar la muestra cargada.} \\\cline{1-3}
+	
+	Pre-condiciones                        	   & \multicolumn{2}{p{10.25cm}}{Deberá haberse cargado la muestra.} \\\cline{1-3}
+	Requisitos                         	   & \multicolumn{2}{p{10.25cm}}{RF-1, RF-2, RF-2.1, RF-2.2, RF-2.3} \\\cline{1-3}
+	\multirow{0}{3.5cm}{Secuencia normal}  & Paso & Acción \\\cline{2-3}
+	& 1    & El usuario selecciona <<Clasificar>> 
+                                         \\\hline
+  
+  	\multirow{0}{3.5cm}{Post-condiciones} &\multicolumn{2}{p{10.25cm}}{Aparece el sujeto clasificado} \\\cline{2-3}
+  	&\multicolumn{2}{p{10.25cm}}{Aparece el botón <<Segmentar>>} \\\cline{2-3}
+  	&\multicolumn{2}{p{10.25cm}}{Aparece el botón <<Coordenadas>>} \\\cline{2-3}
+	&\multicolumn{2}{p{10.25cm}}{Aparece el botón <<Normalizar>>} \\\cline{1-3}
+	Excepciones & 1 & No se ha cargado ninguna muestra. \\\cline{1-3}
+	Frecuencia                             & Alta \\\cline{1-3}
+	Importancia                            & Alta \\
+}
+
+\tablaSmallSinColores{Caso de uso 3: Segmentar}{p{3cm} p{.75cm} p{9cm}}{tablaCUX}{
+	\multicolumn{3}{p{10.25cm}}{CU-3: Segmentar} \\
+}
+{
+	Descripción                            & \multicolumn{2}{p{10.25cm}}{Permite al usuario ver la muestra segmentada} \\\cline{1-3}
+	
+	Pre-condiciones                        	   & \multicolumn{2}{p{10.25cm}}{Deberá haberse pulsado <<Clasificar>>.} \\\cline{1-3}
+	Requisitos                         	   & \multicolumn{2}{p{10.25cm}}{RF-1, RF-2, RF-2.1} \\\cline{1-3}
+	\multirow{0}{3.5cm}{Secuencia normal}  & Paso & Acción \\\cline{2-3}
+	& 1    & El usuario selecciona <<Segmentar>>. \\\cline{2-3}
+	& 2    & Se abre la ventana que muestra la imagen segmentada.  \\\cline{2-3}
+	& 3	   & El usuario cierra la pestaña. 
+                                         \\\hline
+    Post-condiciones                      	   & \multicolumn{2}{p{10.25cm}}{Aparece la muestra segmentada.} \\\cline{1-3}
+ 
+	Excepciones & 1 & No se ha clasificado correctamente el sujeto. \\\cline{1-3}
+	Frecuencia                             & Alta \\\cline{1-3}
+	Importancia                            & Media \\
+}
+
+\tablaSmallSinColores{Caso de uso 4: Mostrar coordenadas}{p{3cm} p{.75cm} p{9cm}}{tablaCUX}{
+	\multicolumn{3}{p{10.25cm}}{CU-4: Mostrar coordenadas} \\
+}
+{
+	Descripción                            & \multicolumn{2}{p{10.25cm}}{Permite al usuario ver los borde límbico y pupilar dibujados sobre la muestra.} \\\cline{1-3}
+	
+	Pre-condiciones                        	   & \multicolumn{2}{p{10.25cm}}{Deberá haberse pulsado <<Clasificar>>.} \\\cline{1-3}
+	Requisitos                         	   & \multicolumn{2}{p{10.25cm}}{RF-1, RF-2, RF-2.2} \\\cline{1-3}
+	\multirow{0}{3.5cm}{Secuencia normal}  & Paso & Acción \\\cline{2-3}
+	& 1    & El usuario selecciona <<Coordenadas>>. \\\cline{2-3}
+	& 2    & Se abre la ventana que muestra la imagen con los bordes dibujados.  \\\cline{2-3}
+	& 3	   & El usuario cierra la pestaña. 
+                                         \\\hline
+    Post-condiciones                      	   & \multicolumn{2}{p{10.25cm}}{Aparece la muestra dibujada.} \\\cline{1-3}
+ 
+	Excepciones & 1 & No se ha clasificado correctamente el sujeto. \\\cline{1-3}
+	Frecuencia                             & Alta \\\cline{1-3}
+	Importancia                            & Media \\
+}
+
+\tablaSmallSinColores{Caso de uso 5: Normalizar}{p{3cm} p{.75cm} p{9cm}}{tablaCUX}{
+	\multicolumn{3}{p{10.25cm}}{CU-5: Normalizar} \\
+}
+{
+	Descripción                            & \multicolumn{2}{p{10.25cm}}{Permite al usuario ver la muestra normalizada.} \\\cline{1-3}
+	
+	Pre-condiciones                        	   & \multicolumn{2}{p{10.25cm}}{Deberá haberse pulsado <<Clasificar>>.} \\\cline{1-3}
+	Requisitos                         	   & \multicolumn{2}{p{10.25cm}}{RF-1, RF-2, RF-2.3} \\\cline{1-3}
+	\multirow{0}{3.5cm}{Secuencia normal}  & Paso & Acción \\\cline{2-3}
+	& 1    & El usuario selecciona <<Normalizar>>. \\\cline{2-3}
+	& 2    & Se abre la ventana que muestra la imagen normalizada.  \\\cline{2-3}
+	& 3	   & El usuario cierra la pestaña. 
+                                         \\\hline
+    Post-condiciones                      	   & \multicolumn{2}{p{10.25cm}}{Aparece la muestra normalizada.} \\\cline{1-3}
+ 
+	Excepciones & 1 & No se ha clasificado correctamente el sujeto. \\\cline{1-3}
+	Frecuencia                             & Alta \\\cline{1-3}
+	Importancia                            & Media \\
+}

@@ -1,11 +1,54 @@
 \apendice{Especificación de diseño}
 
 \section{Introducción}
-
+Se procederá a explicar la organización de todos los elementos que componen la aplicación.
 \section{Diseño de datos}
+\subsection{Dataset empleado}
+Tal y como se explica en la sección 3.7 de la memoria, el dataset empleado para la realización de los experimentos ha sido el \emph{CASIA Iris v1} ~\cite{casia:1}, existían versiones más actuales y grandes, pero se tuvo dificultades para descargarlas, por lo que se optó por la primera versión ya que contenía muestras suficientes como para entrenar un modelo y su peso era de 43 MB.
 
+Este dataset cuenta con 756 imágenes del iris de 108 sujetos. La toma
+de muestras se realizó en 2 sesiones, tomándose 3 muestras en la primera sesión y 4 en la segunda, de modo que se cuenta con un total de 7 muestras por sujeto. Cada muestra está en formato \emph{.bmp} y cuentan una resolución de320x280.
+
+Las muestras vienen enumeradas del \emph{001} al \emph{108}, dentro de cada directorio nos encontramos con 2 subdirectorios \emph{1} y \emph{2} que contendrán 3 y 4 muestras respectivamente.
+\imagen{estructura}{Estructura de directorios de CASIA Iris V1}
+
+Posteriormente se llega a la conclusión de que para el proceso de clasificación se necesitarían etiquetas más claras, ya que establecer que unos atributos extraídos del iris pertenezcan a la clase \emph{025} resulta muy confuso, es por ello que se escogió un dataset de nombres de personas de \emph{Kaggle} y se seleccionaron 108 nombres de dicho dataset para renombrar los directorios de CASIA. De modo que la estructura final del dataset queda así:
+\imagen{estructura1}{Estructura de directorios final.}
+
+\subsection{Datasets generados}
+A medida que se avanzaba con la experimentación en los \emph{notebooks} se iba generando algunos fichero \emph{.csv} que se necesitarían en etapas posteriores:
+\begin{itemize}
+    \item En el \emph{notebook} titulado \texttt{\#6 Funciones-v2.ipynb} se genera el fichero \texttt{iris-data.csv} que contiene las coordenadas (centros y radios) de todas las muestras del dataset. Ver \ref{fig:estructura1}
+    
+    Se trataban de las coordenadas correspondientes a los bordes límbico y pupilar que se harían necesarias en la etapa de normalización. 
+    \item En el \emph{notebook} titulado \texttt{\#8 Feature extraction-v2.ipynb} se genera el fichero \texttt{iris\_features.csv}, que contendrá los atributos extraídos de las muestras polarizadas de 3 modelos de \emph{deep learning} distintos: \emph{VGG16}, \emph{InceptionV3} y \emph{ResNet50}.
+\end{itemize}
+
+\subsection{Diagrama de clases}
+Para el proyecto se crean únicamente 2 clases:
+\begin{itemize}
+    \item \texttt{Classifier} dentro de \texttt{classification.py:} esta clase contiene la lógica para instanciar el modelo de \emph{deep learning} escogido y los métodos para la extracción de atributos y su predicción.
+    \item \texttt{Preprocess} dentro de \texttt{main.py}:contiene los métodos dedicados a la carga de las muestras que se quieren clasificar, al procesamiento de las muestras y a la posterior clasificación.
+    
+    La estructura gráfica y visual de la aplicación también se encuentra contenida en esta clase.
+\end{itemize}
+\imagen{class}{Diagrama de clases.}
 \section{Diseño procedimental}
-
+\subsection{Diagramas de secuencia}
+La aplicación deberá ser capaz de realizar 5 tareas:
+\begin{itemize}
+    \item Cargar la muestra que se quiere clasificar \ref{fig:sec1}.
+    \item Clasificar la muestra \ref{fig:sec2}.
+    \item Mostrar la muestra segmentada \ref{fig:sec3}.
+    \item Mostrar las coordendas de la muestra \ref{fig:sec3}.
+    \item Mostra la muestra noramlizada \ref{fig:sec3}.
+\end{itemize}
+\imagen{sec1}{Diagrama de secuencia para la carga de una muestra.}
+\imagen{sec2}{Diagrama de secuencia para clasificar un sujeto.}
+\imagen{sec3}{Diagrama de secuencia para mostrar las imágenes segmentadas, normalizadas y sus coordenadas.}
 \section{Diseño arquitectónico}
+\subsection{Facade Design Pattern}
+Se intentó seguir el patrón de diseño \emph{facade} ~\cite{wiki:facade} en la que se pretende reducir las dependencias entre subsistemas y clientes dividiendo las tareas en clases y proporcionando una interfaz que conecte dichas clases.
 
+Por ejemplo, para este proyecto se crea una clase que engloba las funciones de minería de datos y otra las de procesamiento imágenes, y lo ideal hubiese sido crear una más que permita acoplar las otras dos, pero se optó por usar el \emph{main} en el fichero\emph{.py} que contiene las tareas de procesamiento.
 

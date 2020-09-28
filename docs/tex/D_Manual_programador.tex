@@ -1,11 +1,42 @@
 \apendice{Documentación técnica de programación}
 
 \section{Introducción}
-
+Se explicará la estructura y organización del proyecto, así como aspectos que se ha de tener en cuenta en caso de que se desee reproducir los resultados obtenidos.
 \section{Estructura de directorios}
-
+Dentro del repositorio encontramos los siguientes ficheros:
+\begin{itemize}
+    \item \texttt{docs:} contiene la documentación del proyecto.
+    \item \texttt{notebooks:} contiene todos los \emph{notebooks} que se han usado para la experimentación así como ficheros generados durante su ejecución.
+    \item \texttt{classification.py:} fichero que contiene la clase que se encargará de instanciar el modelo de \emph{deep learning}, de extraer los atributos, y de predecir.
+    \item \texttt{main.py:} es el fichero que contiene la aplicación.
+    \item \texttt{pickle\_model.pkl:} es el clasificador entrenado con los atributos extraídos de los iris.
+    \item \texttt{u-net download.md:} red prentrenada usada para la segmentación de las muestras (será necesario descargarla).
+    \item \texttt{reqirements.txt:} fichero que contiene las bibliotecas y sus versiones para que la aplicación funcione.
+\end{itemize}
 \section{Manual del programador}
+Se detallarán los pasos que ha de seguir otro usuario que desee poner a prueba o mejorar el funcionamiento del sistema.
 
-\section{Compilación, instalación y ejecución del proyecto}
+Si lo que se quiere es probar la aplicación de escritorio directamente se deberá instalar \emph{Python}, para el desarrollo de este proyecto se ha trabajado con la versión \emph{3.8.3} y acto seguido proceder a la instalación de los requisitos necesarios que se encuentran en el fichero \texttt{requirements.txt}. 
+
+En cambio si se desea explorar el proceso de investigación reflejado en los \emph{notebooks} deberá instalarse además \emph{Anaconda}, aunque de querer ahorrarse este paso se podría usar los cuadernos de \emph{Google Colab}, pero lo más probable es que tarde o temprano surgan problemas que tienen que ver con el acceso a ficheros y directorios.
+
+
+\section{Compilación, instalación y ejecución del proyecto} \label{pasos}
+
+Pasos para la instalación del proyecto:
+\begin{itemize}
+
+    \item Crear un entorno virtual: \texttt{conda create --name iris}
+    \item Cambiarnos a dicho entorno: \texttt{conda activate iris}
+    \item Clonar el repositorio del proyecto: \url{https://github.com/jaa0124/iris_classifier}
+    \item Instalar los requisitos: \texttt{pip install -r requirements.txt}
+    \item Descargar el modelo del fichero \texttt{u-net download.md} y alojarlo en la misma raíz del directorio.
+    \item Ejecutar la aplicación: \texttt{python main.py}
+\end{itemize}
+
+Para probar los cuadernos simplemente ejecutar \emph{Jupyter Notebook} (que se instala con \emph{Anaconda}) y se podrá empezar a trabajar con ellos y reproducir los resultados obtenidos.
+
+Todos los cuadernos se encuentran en el directorio \texttt{notebooks}.
 
 \section{Pruebas del sistema}
+Todos los experimentos realizados se encuentran explicados detalladamente en los cuadernos de \emph{Jupyter}, y los más importantes se han explicado ya en la sección 5.2 y 5.3 de la memoria. Así mismo existen varias versiones mejoradas de los mismos cuadernos que aparecen indicados con el sufijo \texttt{-v2}.

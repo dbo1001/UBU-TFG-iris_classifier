@@ -1,4 +1,21 @@
 \capitulo{7}{Conclusiones y Líneas de trabajo futuras}
 
-Todo proyecto debe incluir las conclusiones que se derivan de su desarrollo. Éstas pueden ser de diferente índole, dependiendo de la tipología del proyecto, pero normalmente van a estar presentes un conjunto de conclusiones relacionadas con los resultados del proyecto y un conjunto de conclusiones técnicas. 
-Además, resulta muy útil realizar un informe crítico indicando cómo se puede mejorar el proyecto, o cómo se puede continuar trabajando en la línea del proyecto realizado. 
+\subsection{Conclusión}
+Tras finalizar el proyecto se llega a la siguiente serie de conclusiones:
+\begin{itemize}
+    \item El objetivo general que consistía en estudiar las fases del reconocimiento e implementar un modelo funcional propio se ha cumplido. Por supuesto hubo complicaciones que hicieron que el proyecto se desarrollase más lentamente y estuviese incluso a punto de abandonarse, pero que pudieron superarse gracias a la extensa documentación disponible en internet y a la propia ayuda del tutor.
+    \item El proyecto ha requerido de los conocimientos adquiridos en la carrera y de unos nuevos, por lo que el hecho de haber realizado este proyecto ha servido para formarse y adquirir competencias de manera autodidacta.
+    \item El hecho de haber elegido temáticas de \emph{Machine Learning} y \emph{Deep Learning} ha permitido percatarse de la verdadera magnitud de dichas tecnologías en el mundo actual y nos da pistas de la dirección que tomarán todo tipo de industrias en el futuro.
+    \item Por muy bien que esté planificado un proyecto, siempre se ha de estar preparado para los inconvenientes que surgan y se debe ser capaz de redirigirlo de modo que no se ponga en peligro su correcto desarrollo.
+\end{itemize}
+\subsection{Líneas de trabajo futuras}
+\begin{itemize}
+    \item Aunque en el apartado de conclusiones se dice que el proyecto se ha desarrollado correctamente, esto no es así.
+    En la última etapa a la hora de exportar el clasificador entrenado para usarlo en la aplicación de escritorio, hubo problemas que no dio tiempo a solucionar.
+    
+    Al entrenar el clasificador en los \emph{notebooks} con los datos del fichero \texttt{iris\_features.csv} se obtiene un modelo funcional que al ponerse a prueba, funciona a la perfección, es decir, clasifica correctamente. Pero cuando se usa en la aplicación empieza a fallar estrepitosamente, ya que clasifica incorrectamente y por lo general el resultado siempre es \emph{Xin} o \emph{Anas}.
+    
+    Es por ello que se propone como tarea investigar y solucionar este error, ya que es el único destacable, las etapas anteriores aunque igual no son muy óptimas, cumplen con su labor.
+    \item Convendría ampliar el conjunto de muestras sobre la que es aplicable el proyecto, es decir, debería hacerse más general de modo que permita clasificar muestras de cualquier dataset de ojos o puede que hasta datasets propios, por ejempo, muestras tomadas por cualquier usuario, aunque se deberá tener en cuenta lo visto en ~\ref{adquisicion_label}.
+    \item Otro aspecto a mejorar sería la funcionalidad de la aplicación de escritorio, ya que la actual es muy básica.
+\end{itemize}
