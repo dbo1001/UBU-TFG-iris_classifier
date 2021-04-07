@@ -15,3 +15,4 @@ El proceso de reconocimiento se realiza en 3 fases:
 - __Clasificación__: se compara los iris con una base de datos.
 
 ![Iris recognition](https://www.bayometric.com/wp-content/uploads/2016/06/an-iris-recognition-system.jpg)
+
