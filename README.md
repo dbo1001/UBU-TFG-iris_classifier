@@ -14,5 +14,5 @@ El proceso de reconocimiento se realiza en 3 fases:
     - __Extraer features__: en esta etapa se extraen los patrones característicos de cada iris ya sea mediante algoritmos mateméticos convencionales o con algoritmos de _machine learning_
 - __Clasificación__: se compara los iris con una base de datos.
 
-![Iris recognition](https://www.bayometric.com/wp-content/uploads/2016/06/an-iris-recognition-system.jpg)
+![Iris recognition](https://www.bayometric.com/wp-content/uploads/2016/06/an-iris-recognition-system.jpg)     
 
